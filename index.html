@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- منع محركات البحث من أرشفة الصفحة لتظل خاصة بك -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>مسبحتي الخاصة</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #27ae60;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333333;
+        }
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        header { background-color: var(--primary); color: white; width: 100%; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 500px; padding: 20px; }
+        
+        select { width: 100%; padding: 15px; font-size: 18px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; text-align: center; appearance: none; background: var(--card-bg); font-weight: bold;}
+        
+        /* شريط التقدم */
+        .progress-wrapper { width: 100%; background: #e0e0e0; border-radius: 20px; overflow: hidden; height: 20px; margin-bottom: 10px; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+        .stats { display: flex; justify-content: space-between; width: 100%; font-size: 16px; font-weight: bold; color: #555; margin-bottom: 40px; }
+        
+        /* الزر الدائري الرئيسي */
+        .tap-btn {
+            width: 250px; height: 250px; border-radius: 50%; background: var(--card-bg);
+            border: 8px solid var(--accent); color: var(--primary); font-size: 28px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            padding: 20px; cursor: pointer; user-select: none;
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .tap-btn:active { transform: scale(0.95); box-shadow: 0 5px 15px rgba(39, 174, 96, 0.2); }
+        
+        /* أزرار التحكم */
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 40px; }
+        .btn { padding: 15px; font-size: 16px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
+        .btn-reset { background-color: #e74c3c; grid-column: span 2; }
+        .btn-edit { background-color: #f39c12; }
+        .btn-add { background-color: #2980b9; }
+        .btn:active { opacity: 0.8; }
+
+        /* النافذة المنبثقة (Modal) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; }
+        .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .modal-actions .btn { flex: 1; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>مسبحتي</h2>
+    </header>
+
+    <div class="container">
+        <select id="dhikrSelect"></select>
+
+        <div class="progress-wrapper">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="stats">
+            <span id="percentageTxt">0%</span>
+            <span id="countTxt">0 / 1000</span>
+        </div>
+
+        <div class="tap-btn" id="tapBtn">سبحان الله</div>
+
+        <div class="controls">
+            <button class="btn btn-add" id="addBtn">إضافة ذكر</button>
+            <button class="btn btn-edit" id="editBtn">تعديل الحالي</button>
+            <button class="btn btn-reset" id="resetBtn">تصفير العداد</button>
+        </div>
+    </div>
+
+    <!-- نافذة الإضافة/التعديل -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">إضافة ذكر جديد</h3>
+            <input type="text" id="dhikrNameInput" placeholder="نص الذكر (مثال: أستغفر الله)">
+            <input type="number" id="dhikrTargetInput" placeholder="الهدف (مثال: 1000)">
+            <div class="modal-actions">
+                <button class="btn" style="background: var(--accent)" id="saveModalBtn">حفظ</button>
+                <button class="btn" style="background: #95a5a6" id="closeModalBtn">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // الأذكار الافتراضية
+        const defaultDhikrs = [
+            { id: 1, text: "سبحان الله وبحمده", count: 0, target: 100 },
+            { id: 2, text: "أستغفر الله العظيم وأتوب إليه", count: 0, target: 1000 },
+            { id: 3, text: "لا إله إلا الله وحده لا شريك له", count: 0, target: 100 },
+            { id: 4, text: "اللهم صل وسلم على نبينا محمد", count: 0, target: 100 }
+        ];
+
+        let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_app')) || defaultDhikrs;
+        let currentId = dhikrs[0]?.id || 1;
+        let editingId = null;
+
+        // عناصر الواجهة
+        const selectEl = document.getElementById('dhikrSelect');
+        const tapBtn = document.getElementById('tapBtn');
+        const countTxt = document.getElementById('countTxt');
+        const percentageTxt = document.getElementById('percentageTxt');
+        const progressFill = document.getElementById('progressFill');
+        const modal = document.getElementById('modal');
+        const nameInput = document.getElementById('dhikrNameInput');
+        const targetInput = document.getElementById('dhikrTargetInput');
+        const modalTitle = document.getElementById('modalTitle');
+
+        function saveData() {
+            localStorage.setItem('my_dhikr_app', JSON.stringify(dhikrs));
+        }
+
+        function renderSelect() {
+            selectEl.innerHTML = '';
+            dhikrs.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = d.text;
+                if(d.id == currentId) opt.selected = true;
+                selectEl.appendChild(opt);
+            });
+            updateUI();
+        }
+
+        function updateUI() {
+            const current = dhikrs.find(d => d.id == currentId);
+            if (!current) return;
+            
+            tapBtn.textContent = current.text;
+            countTxt.textContent = `${current.count} / ${current.target}`;
+            
+            let percentage = current.target > 0 ? (current.count / current.target) * 100 : 0;
+            if(percentage > 100) percentage = 100;
+            
+            percentageTxt.textContent = `${Math.floor(percentage)}%`;
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        // التفاعل مع الزر الدائري
+        tapBtn.addEventListener('click', () => {
+            const current = dhikrs.find(d => d.id == currentId);
+            current.count++;
+            
+            // اهتزاز خفيف للهاتف عند النقر (إذا كان مدعوماً)
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            saveData();
+            updateUI();
+        });
+
+        // تغيير الذكر من القائمة
+        selectEl.addEventListener('change', (e) => {
+            currentId = parseInt(e.target.value);
+            updateUI();
+        });
+
+        // تصفير العداد
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if(confirm('هل أنت متأكد من تصفير هذا العداد؟')) {
+                const current = dhikrs.find(d => d.id == currentId);
+                current.count = 0;
+                saveData();
+                updateUI();
+            }
+        });
+
+        // النوافذ المنبثقة
+        document.getElementById('addBtn').addEventListener('click', () => {
+            editingId = null;
+            modalTitle.textContent = "إضافة ذكر جديد";
+            nameInput.value = "";
+            targetInput.value = "1000";
+            modal.classList.add('active');
+        });
+
+        document.getElementById('editBtn').addEventListener('click', () => {
+            const current = dhikrs.find(d => d.id == currentId);
+            editingId = current.id;
+            modalTitle.textContent = "تعديل الذكر الحالي";
+            nameInput.value = current.text;
+            targetInput.value = current.target;
+            modal.classList.add('active');
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        document.getElementById('saveModalBtn').addEventListener('click', () => {
+            const text = nameInput.value.trim();
+            const target = parseInt(targetInput.value) || 1000;
+            
+            if (!text) return alert("الرجاء كتابة نص الذكر");
+
+            if (editingId) {
+                const current = dhikrs.find(d => d.id == editingId);
+                current.text = text;
+                current.target = target;
+            } else {
+                const newId = dhikrs.length ? Math.max(...dhikrs.map(d => d.id)) + 1 : 1;
+                dhikrs.push({ id: newId, text: text, count: 0, target: target });
+                currentId = newId;
+            }
+            
+            saveData();
+            renderSelect();
+            modal.classList.remove('active');
+        });
+
+        // تسجيل Service Worker لتفعيل تطبيق الجوال PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+
+        renderSelect();
+    </script>
+</body>
+</html>
