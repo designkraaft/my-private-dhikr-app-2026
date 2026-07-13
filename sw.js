@@ -1,14 +1,13 @@
-const CACHE_NAME = 'dhikr-app-pro-v4';
+const CACHE_NAME = 'dhikr-app-pro-v5';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  // تخزين مكتبة السحب والإفلات لتعمل بدون انترنت
   'https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js'
 ];
 
 self.addEventListener('install', event => {
-  self.skipWaiting();
+  // لا تقم بتخطي الانتظار تلقائياً، انتظر موافقة المستخدم
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
@@ -33,9 +32,7 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        if (response) {
-          return response;
-        }
+        if (response) return response;
         return fetch(event.request).then(
           function(response) {
             if(!response || response.status !== 200 || response.type !== 'basic') {
@@ -51,4 +48,11 @@ self.addEventListener('fetch', event => {
         );
       })
   );
+});
+
+// استقبال أمر التحديث من المستخدم
+self.addEventListener('message', event => {
+  if (event.data === 'skipWaiting') {
+    self.skipWaiting();
+  }
 });
