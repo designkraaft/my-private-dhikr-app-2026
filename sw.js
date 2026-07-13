@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dhikr-app-pro-v5';
+const CACHE_NAME = 'dhikr-app-pro-v6'; // تحديث رقم الكاش لإجبار الأجهزة على التحديث
 const urlsToCache = [
   './',
   './index.html',
@@ -7,7 +7,6 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
-  // لا تقم بتخطي الانتظار تلقائياً، انتظر موافقة المستخدم
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
@@ -50,7 +49,7 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// استقبال أمر التحديث من المستخدم
+// يستمع هذا الكود لضغطة المستخدم على "شريط التحديث" في الصفحة
 self.addEventListener('message', event => {
   if (event.data === 'skipWaiting') {
     self.skipWaiting();
