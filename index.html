@@ -86,7 +86,7 @@
         <div class="header">
             <h1>مسبحتي</h1>
             <div class="header-actions">
-                <!-- زر التثبيت الذكي (مخفي افتراضياً، يظهر فقط إذا كان متاحاً) -->
+                <!-- زر التثبيت الذكي -->
                 <button class="icon-btn" id="installBtn" title="تثبيت التطبيق" style="color: #3b82f6; display: none;">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
@@ -101,7 +101,7 @@
             </div>
         </div>
         <div class="list-container" id="dhikrList">
-            <!-- سيتم توليد البطاقات هنا -->
+            <!-- البطاقات -->
         </div>
     </div>
 
@@ -329,25 +329,20 @@
     const installBtn = document.getElementById('installBtn');
 
     window.addEventListener('beforeinstallprompt', (e) => {
-        // منع المتصفح من إظهار رسالة التثبيت التلقائية
         e.preventDefault();
-        // حفظ الحدث لاستخدامه عند النقر على الزر
         deferredPrompt = e;
-        // إظهار زر التثبيت لأن النظام يدعم ذلك
         installBtn.style.display = 'flex';
     });
 
     installBtn.addEventListener('click', async () => {
         if (deferredPrompt !== null) {
-            // إظهار رسالة التثبيت
             deferredPrompt.prompt();
-            // انتظار رد المستخدم
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
-                console.log('تم قبول التثبيت');
+                console.log('تم التثبيت بنجاح');
             }
             deferredPrompt = null;
-            installBtn.style.display = 'none'; // إخفاء الزر بعد التثبيت
+            installBtn.style.display = 'none';
         }
     });
 
@@ -356,7 +351,6 @@
         deferredPrompt = null;
     });
 
-    // تسجيل Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js');
