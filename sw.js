@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dhikr-app-v1';
+const CACHE_NAME = 'dhikr-app-pro-v2';
 const urlsToCache = [
   './',
   './index.html',
