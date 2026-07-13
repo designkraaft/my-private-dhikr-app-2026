@@ -2,10 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- إعدادات الشاشة الكاملة ومنع التكبير العشوائي -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0f172a">
-    <!-- إعدادات الايفون ليظهر كتطبيق حقيقي -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3669/3669483.png">
@@ -13,59 +11,50 @@
     <title>مسبحتي</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        /* الألوان العصرية (الوضع الليلي الأنيق) */
         :root {
-            --bg: #0f172a;        /* خلفية رئيسية غامقة */
-            --surface: #1e293b;   /* لون البطاقات */
-            --primary: #10b981;   /* الأخضر العصري (الزمردي) */
-            --text: #f8fafc;      /* أبيض ساطع للنصوص */
-            --text-muted: #94a3b8;/* رمادي فاتح للنصوص الثانوية */
-            --danger: #ef4444;    /* أحمر لأزرار الحذف/التصفير */
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --primary: #10b981;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
         }
 
-        /* إعدادات التطبيق الأساسية لمنع سلوك صفحة الويب */
         * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; outline: none; }
         body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); height: 100dvh; overflow: hidden; user-select: none; }
         
         #app { display: flex; width: 100%; height: 100%; position: relative; }
         
-        /* نظام الشاشات (Screen Management) */
         .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; background: var(--bg); opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; transform: scale(0.95); }
         .screen.active { opacity: 1; pointer-events: all; transform: scale(1); z-index: 10; }
 
-        /* الشاشة الأولى: قائمة الأذكار */
         .header { padding: 20px; padding-top: env(safe-area-inset-top, 20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
         .header h1 { margin: 0; font-size: 24px; }
+        .header-actions { display: flex; gap: 10px; }
+        
         .icon-btn { background: transparent; border: none; color: var(--primary); display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 8px; border-radius: 50%; transition: 0.2s; }
         .icon-btn:active { background: rgba(16, 185, 129, 0.2); transform: scale(0.9); }
         
         .list-container { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 15px; }
         
-        /* تصميم بطاقة الذكر في القائمة */
         .card { background: var(--surface); border-radius: 20px; padding: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.1s; display: flex; flex-direction: column; gap: 12px; }
         .card:active { transform: scale(0.96); }
         .card-header { display: flex; justify-content: space-between; align-items: center; }
         .card-title { font-size: 18px; font-weight: bold; margin: 0; }
         .card-count { font-size: 16px; color: var(--primary); font-weight: bold; }
         
-        /* شريط التقدم الخطي في البطاقات */
         .progress-bar-bg { width: 100%; height: 8px; background: #334155; border-radius: 10px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.3s ease; }
 
-        /* الشاشة الثانية: شاشة العداد الدائري */
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; padding-top: env(safe-area-inset-top, 20px); }
         .counter-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .dhikr-text-display { font-size: 28px; text-align: center; margin-bottom: 40px; font-weight: bold; line-height: 1.4; color: var(--text); }
         
-        /* الزر الدائري العملاق الاحترافي */
         .circle-wrapper { position: relative; width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; }
-        
-        /* دائرة الـ SVG المحيطة */
         .progress-ring { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
         .progress-ring__circle_bg { stroke: var(--surface); fill: transparent; stroke-width: 12; }
         .progress-ring__circle { stroke: var(--primary); fill: transparent; stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 0.1s ease-out; }
         
-        /* منطقة النقر الداخلية */
         .tap-area { position: absolute; width: 260px; height: 260px; border-radius: 50%; background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: transform 0.05s; }
         .tap-area:active { transform: scale(0.94); box-shadow: 0 5px 15px rgba(0,0,0,0.4); background: #243247; }
         .count-huge { font-size: 50px; font-weight: bold; margin: 0; color: var(--text); }
@@ -73,7 +62,6 @@
 
         .bottom-controls { width: 100%; display: flex; justify-content: center; gap: 20px; padding: 30px; padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
 
-        /* النوافذ المنبثقة (Modal) */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; backdrop-filter: blur(5px); }
         .modal.active { opacity: 1; pointer-events: all; }
         .modal-content { background: var(--surface); width: 100%; max-width: 350px; border-radius: 24px; padding: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); transform: translateY(20px); transition: 0.3s; }
@@ -97,19 +85,25 @@
     <div id="list-screen" class="screen active">
         <div class="header">
             <h1>مسبحتي</h1>
-            <button class="icon-btn" onclick="openModal()" title="إضافة ذكر جديد">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
-            </button>
+            <div class="header-actions">
+                <!-- زر تحديث التطبيق الجديد -->
+                <button class="icon-btn" onclick="forceAppUpdate()" title="تحديث التطبيق" style="color: var(--text-muted);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <!-- زر الإضافة -->
+                <button class="icon-btn" onclick="openModal()" title="إضافة ذكر جديد">
+                    <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                </button>
+            </div>
         </div>
         <div class="list-container" id="dhikrList">
-            <!-- سيتم توليد البطاقات هنا برمجياً -->
+            <!-- سيتم توليد البطاقات هنا -->
         </div>
     </div>
 
     <!-- الشاشة الثانية: شاشة العداد -->
     <div id="counter-screen" class="screen">
         <div class="top-bar">
-            <!-- زر الرجوع (يمين لليسار) -->
             <button class="icon-btn" onclick="goBack()" style="color: var(--text)">
                 <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
@@ -122,13 +116,11 @@
             <div class="dhikr-text-display" id="activeDhikrText">سبحان الله</div>
             
             <div class="circle-wrapper">
-                <!-- الدائرة المحيطية SVG -->
                 <svg class="progress-ring" width="300" height="300">
                     <circle class="progress-ring__circle_bg" cx="150" cy="150" r="135"></circle>
                     <circle id="progressRing" class="progress-ring__circle" cx="150" cy="150" r="135"></circle>
                 </svg>
                 
-                <!-- زر النقر الدائري المركزي -->
                 <div class="tap-area" onclick="increment()">
                     <p class="count-huge" id="activeCount">0</p>
                     <p class="target-small" id="activeTarget">الهدف: 100</p>
@@ -144,7 +136,6 @@
     </div>
 </div>
 
-<!-- نافذة الإضافة / التعديل -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <h3 id="modalTitle">إضافة ذكر جديد</h3>
@@ -164,18 +155,16 @@
 </div>
 
 <script>
-    // تهيئة البيانات
     const defaultDhikrs = [
         { id: 1, text: "سبحان الله وبحمده", count: 0, target: 100 },
         { id: 2, text: "أستغفر الله العظيم وأتوب إليه", count: 0, target: 1000 },
-        { id: 3, text: "الصلاة على النبي", count: 0, target: 0 } // هدف 0 يعني مفتوح
+        { id: 3, text: "الصلاة على النبي", count: 0, target: 0 } 
     ];
 
     let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_pro')) || defaultDhikrs;
     let activeId = null;
     let editingId = null;
 
-    // حساب محيط الدائرة للـ SVG
     const circle = document.getElementById('progressRing');
     const radius = circle.r.baseVal.value;
     const circumference = radius * 2 * Math.PI;
@@ -183,7 +172,6 @@
     circle.style.strokeDashoffset = circumference;
 
     function setProgress(percent) {
-        // إذا زادت النسبة عن 100 نجعل الدائرة كاملة
         if(percent > 100) percent = 100;
         const offset = circumference - (percent / 100) * circumference;
         circle.style.strokeDashoffset = offset;
@@ -193,7 +181,6 @@
         localStorage.setItem('my_dhikr_pro', JSON.stringify(dhikrs));
     }
 
-    // بناء قائمة الأذكار
     function renderList() {
         const listContainer = document.getElementById('dhikrList');
         listContainer.innerHTML = '';
@@ -221,7 +208,6 @@
         });
     }
 
-    // فتح شاشة العداد
     function openCounter(id) {
         activeId = id;
         updateCounterUI();
@@ -229,15 +215,13 @@
         document.getElementById('counter-screen').classList.add('active');
     }
 
-    // العودة للقائمة
     function goBack() {
-        renderList(); // تحديث القائمة بالقيم الجديدة
+        renderList(); 
         document.getElementById('counter-screen').classList.remove('active');
         document.getElementById('list-screen').classList.add('active');
         activeId = null;
     }
 
-    // تحديث واجهة العداد
     function updateCounterUI() {
         if(!activeId) return;
         const current = dhikrs.find(d => d.id === activeId);
@@ -251,24 +235,19 @@
             targetEl.style.display = 'block';
             setProgress((current.count / current.target) * 100);
         } else {
-            targetEl.style.display = 'none'; // إخفاء الهدف إذا كان مفتوحاً
-            setProgress(100); // جعل الدائرة ممتلئة دائماً أو يمكن جعلها 0
+            targetEl.style.display = 'none';
+            setProgress(100); 
         }
     }
 
-    // زيادة العداد عند النقر
     function increment() {
         const current = dhikrs.find(d => d.id === activeId);
         current.count++;
-        
-        // تفاعل الهاتف (اهتزاز خفيف)
         if (navigator.vibrate) navigator.vibrate(40);
-        
         saveData();
         updateCounterUI();
     }
 
-    // تصفير العداد
     function resetCurrent() {
         if(confirm("هل أنت متأكد من تصفير العداد؟")) {
             const current = dhikrs.find(d => d.id === activeId);
@@ -278,7 +257,6 @@
         }
     }
 
-    // إدارة النافذة المنبثقة
     function openModal(isEdit = false) {
         const modal = document.getElementById('modal');
         const title = document.getElementById('modalTitle');
@@ -308,7 +286,7 @@
     function saveDhikr() {
         const text = document.getElementById('dhikrNameInput').value.trim();
         const targetStr = document.getElementById('dhikrTargetInput').value;
-        const target = targetStr ? parseInt(targetStr) : 0; // إذا تركها فارغة تصبح 0 (مفتوح)
+        const target = targetStr ? parseInt(targetStr) : 0; 
         
         if (!text) return alert("يرجى كتابة نص الذكر");
 
@@ -327,14 +305,29 @@
         closeModal();
     }
 
-    // تسجيل الخدمة لتشغيله بدون انترنت
+    // دالة تحديث التطبيق وحذف الكاش القديم
+    function forceAppUpdate() {
+        if(confirm("هل تريد جلب أحدث التعديلات للتطبيق؟ (لن يتم حذف أذكارك وأرقامك)")) {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (let registration of registrations) {
+                        registration.unregister();
+                    }
+                    // إضافة رقم عشوائي للرابط لكسر الكاش فوراً
+                    window.location.href = window.location.pathname + '?v=' + new Date().getTime();
+                });
+            } else {
+                window.location.reload(true);
+            }
+        }
+    }
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js');
         });
     }
 
-    // بدء التطبيق
     renderList();
 </script>
 </body>
