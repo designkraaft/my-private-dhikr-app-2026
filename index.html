@@ -1,122 +1,181 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" id="themeColorMeta" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3669/3669483.png">
     
     <title>مسبحتي</title>
     <link rel="manifest" href="manifest.json">
+    <!-- مكتبة السحب والإفلات الاحترافية -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
     <style>
+        /* المتغيرات الأساسية (الوضع الليلي الافتراضي) */
         :root {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --primary: #10b981;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.4);
             --text: #f8fafc;
             --text-muted: #94a3b8;
             --danger: #ef4444;
+            --card-radius: 24px;
         }
 
-        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); height: 100dvh; overflow: hidden; user-select: none; }
+        /* الوضع النهاري (ألوان مائية زاهية) */
+        [data-theme="light"] {
+            --bg-gradient: linear-gradient(135deg, #e0eaf5 0%, #f0f4f8 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 1);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --primary: #0ea5e9;
+            --primary-glow: rgba(14, 165, 233, 0.4);
+            --text: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; outline: none; transition: background-color 0.3s, color 0.3s; }
+        body { margin: 0; padding: 0; background: var(--bg-gradient); color: var(--text); height: 100dvh; overflow: hidden; user-select: none; }
         
         #app { display: flex; width: 100%; height: 100%; position: relative; }
         
-        .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; background: var(--bg); opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; transform: scale(0.95); }
+        /* نظام الشاشات */
+        .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; transform: scale(0.95); }
         .screen.active { opacity: 1; pointer-events: all; transform: scale(1); z-index: 10; }
 
-        .header { padding: 20px; padding-top: env(safe-area-inset-top, 20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
-        .header h1 { margin: 0; font-size: 24px; }
+        /* التصميم الزجاجي (Glassmorphism) للبطاقات */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--card-radius);
+        }
+
+        .header { padding: 20px; padding-top: env(safe-area-inset-top, 20px); display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        .header h1 { margin: 0; font-size: 26px; font-weight: 800; background: -webkit-linear-gradient(45deg, var(--primary), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .header-actions { display: flex; gap: 8px; align-items: center; }
         
-        .icon-btn { background: transparent; border: none; color: var(--primary); display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 8px; border-radius: 50%; transition: 0.2s; }
-        .icon-btn:active { background: rgba(16, 185, 129, 0.2); transform: scale(0.9); }
+        .icon-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(8px); color: var(--primary); display: flex; justify-content: center; align-items: center; cursor: pointer; width: 45px; height: 45px; border-radius: 50%; transition: 0.2s; box-shadow: var(--glass-shadow); }
+        .icon-btn:active { transform: scale(0.9); background: var(--primary); color: white; }
         
-        .list-container { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 15px; }
+        /* بطاقة الإنجاز اليومي */
+        .daily-progress-card { margin: 0 20px 15px 20px; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .daily-progress-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); opacity: 0.5; pointer-events: none; }
+        .daily-title { font-size: 16px; font-weight: bold; margin: 0; color: var(--text-muted); }
+        .daily-date { font-size: 14px; margin: 5px 0 15px 0; color: var(--primary); }
+        .daily-count { font-size: 42px; font-weight: 900; margin: 0; line-height: 1; text-shadow: 0 4px 15px var(--primary-glow); }
         
-        .card { background: var(--surface); border-radius: 20px; padding: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.1s; display: flex; flex-direction: column; gap: 12px; }
+        .list-container { flex: 1; overflow-y: auto; padding: 5px 20px 20px 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 15px; }
+        
+        /* بطاقة الذكر في القائمة */
+        .card { padding: 20px; cursor: pointer; transition: transform 0.1s; display: flex; flex-direction: column; gap: 12px; position: relative; }
         .card:active { transform: scale(0.96); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        /* علامة السحب */
+        .drag-handle { position: absolute; left: 15px; top: 20px; color: var(--text-muted); opacity: 0.5; cursor: grab; padding: 5px; }
+        .drag-handle:active { cursor: grabbing; }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: center; padding-left: 25px; }
         .card-title-group { display: flex; flex-direction: column; gap: 4px; }
         .card-title { font-size: 18px; font-weight: bold; margin: 0; }
         .card-reset-info { font-size: 12px; color: var(--text-muted); margin: 0; }
-        .card-count { font-size: 16px; color: var(--primary); font-weight: bold; }
+        .card-count { font-size: 18px; color: var(--primary); font-weight: 900; }
         
-        .progress-bar-bg { width: 100%; height: 8px; background: #334155; border-radius: 10px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.3s ease; }
+        .progress-bar-bg { width: 100%; height: 6px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; }
+        [data-theme="dark"] .progress-bar-bg { background: rgba(255,255,255,0.1); }
+        .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.3s ease; box-shadow: 0 0 10px var(--primary-glow); }
 
+        /* شاشة العداد والتسبيح */
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; padding-top: env(safe-area-inset-top, 20px); }
         .counter-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .dhikr-text-display { font-size: 28px; text-align: center; margin-bottom: 40px; font-weight: bold; line-height: 1.4; color: var(--text); }
         
+        /* تأثير الزر الدائري (فقاعة مائية) */
         .circle-wrapper { position: relative; width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; }
-        .progress-ring { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
-        .progress-ring__circle_bg { stroke: var(--surface); fill: transparent; stroke-width: 12; }
-        .progress-ring__circle { stroke: var(--primary); fill: transparent; stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 0.1s ease-out; }
+        .progress-ring { position: absolute; top: 0; left: 0; transform: rotate(-90deg); drop-shadow: 0 0 10px var(--primary-glow); }
+        .progress-ring__circle_bg { stroke: var(--glass-border); fill: transparent; stroke-width: 8; opacity: 0.3; }
+        .progress-ring__circle { stroke: var(--primary); fill: transparent; stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 0.1s ease-out; filter: drop-shadow(0 0 8px var(--primary-glow)); }
         
-        .tap-area { position: absolute; width: 260px; height: 260px; border-radius: 50%; background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: transform 0.05s; }
-        .tap-area:active { transform: scale(0.94); box-shadow: 0 5px 15px rgba(0,0,0,0.4); background: #243247; }
-        .count-huge { font-size: 50px; font-weight: bold; margin: 0; color: var(--text); }
-        .target-small { font-size: 16px; color: var(--text-muted); margin-top: 5px; }
+        .tap-area { position: absolute; width: 250px; height: 250px; border-radius: 50%; z-index: 10; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: transform 0.05s, box-shadow 0.2s; }
+        /* اللمسة الزجاجية الناعمة للزر الداخلي */
+        .tap-area { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 2px solid var(--glass-border); box-shadow: inset 0 0 20px rgba(255,255,255,0.1), 0 15px 35px rgba(0,0,0,0.2); }
+        .tap-area:active { transform: scale(0.92); box-shadow: inset 0 0 30px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.2); }
+        [data-theme="light"] .tap-area:active { box-shadow: inset 0 0 30px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.1); }
         
-        .active-reset-date { font-size: 14px; color: var(--text-muted); margin-top: 20px; text-align: center; }
+        .count-huge { font-size: 55px; font-weight: 900; margin: 0; color: var(--text); }
+        .target-small { font-size: 16px; color: var(--text-muted); margin-top: 5px; font-weight: bold; }
+        .active-reset-date { font-size: 14px; color: var(--text-muted); margin-top: 30px; text-align: center; background: var(--glass-bg); padding: 8px 20px; border-radius: 20px; border: 1px solid var(--glass-border); }
 
         .bottom-controls { width: 100%; display: flex; justify-content: center; gap: 20px; padding: 30px; padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; backdrop-filter: blur(5px); }
+        /* النوافذ المنبثقة */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; }
         .modal.active { opacity: 1; pointer-events: all; }
-        .modal-content { background: var(--surface); width: 100%; max-width: 350px; border-radius: 24px; padding: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); transform: translateY(20px); transition: 0.3s; }
+        .modal-content { width: 100%; max-width: 350px; transform: translateY(20px); transition: 0.3s; padding: 30px; }
         .modal.active .modal-content { transform: translateY(0); }
-        .modal h3 { margin-top: 0; margin-bottom: 20px; text-align: center; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
-        .input-group input { width: 100%; background: var(--bg); border: 1px solid #334155; color: white; padding: 15px; border-radius: 12px; font-size: 16px; }
-        .input-group input:focus { border-color: var(--primary); }
-        .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
-        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; }
+        .modal h3 { margin-top: 0; margin-bottom: 25px; text-align: center; font-size: 22px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 10px; color: var(--text-muted); font-size: 14px; font-weight: bold;}
+        .input-group input { width: 100%; background: rgba(0,0,0,0.1); border: 1px solid var(--glass-border); color: var(--text); padding: 15px; border-radius: 16px; font-size: 16px; transition: 0.3s; }
+        [data-theme="light"] .input-group input { background: rgba(255,255,255,0.5); }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+        .modal-actions { display: flex; gap: 15px; margin-top: 30px; }
+        .btn { flex: 1; padding: 16px; border-radius: 16px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; box-shadow: var(--glass-shadow); }
         .btn-primary { background: var(--primary); }
-        .btn-secondary { background: #475569; }
-        .btn:active { transform: scale(0.95); opacity: 0.9; }
+        .btn-secondary { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text); }
+        .btn:active { transform: scale(0.95); }
+        
+        /* شبح السحب */
+        .sortable-ghost { opacity: 0.4; transform: scale(0.98); border: 2px dashed var(--primary); }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <!-- الشاشة الأولى: قائمة الأذكار -->
+    <!-- الشاشة الأولى: القائمة -->
     <div id="list-screen" class="screen active">
         <div class="header">
             <h1>مسبحتي</h1>
             <div class="header-actions">
-                <!-- زر التثبيت الذكي -->
-                <button class="icon-btn" id="installBtn" title="تثبيت التطبيق" style="color: #3b82f6; display: none;">
-                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <button class="icon-btn" id="themeToggleBtn" title="تبديل الوضع" onclick="toggleTheme()">
+                    <svg id="themeIcon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
-                <!-- زر تحديث التطبيق -->
-                <button class="icon-btn" onclick="forceAppUpdate()" title="تحديث التطبيق" style="color: var(--text-muted);">
-                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <button class="icon-btn" id="installBtn" title="تثبيت التطبيق" style="display: none;">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
-                <!-- زر الإضافة -->
-                <button class="icon-btn" onclick="openModal()" title="إضافة ذكر جديد">
-                    <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                <button class="icon-btn" onclick="openModal()" title="إضافة ذكر">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
                 </button>
             </div>
         </div>
+        
+        <!-- إنجاز اليوم -->
+        <div class="glass-panel daily-progress-card">
+            <p class="daily-title">إنجازك اليوم 🏆</p>
+            <p class="daily-date" id="dailyDateTxt"></p>
+            <p class="daily-count" id="dailyTotalTxt">0</p>
+        </div>
+
         <div class="list-container" id="dhikrList">
             <!-- البطاقات -->
         </div>
     </div>
 
-    <!-- الشاشة الثانية: شاشة العداد -->
+    <!-- الشاشة الثانية: العداد -->
     <div id="counter-screen" class="screen">
         <div class="top-bar">
-            <button class="icon-btn" onclick="goBack()" style="color: var(--text)">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <button class="icon-btn" onclick="goBack()">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <button class="icon-btn" onclick="openModal(true)" style="color: var(--text-muted)">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <button class="icon-btn" onclick="openModal(true)">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
         </div>
         
@@ -135,27 +194,26 @@
                 </div>
             </div>
             
-            <!-- عرض تاريخ التصفير هنا -->
             <p class="active-reset-date" id="activeResetDate"></p>
         </div>
 
         <div class="bottom-controls">
-            <button class="icon-btn" onclick="resetCurrent()" style="color: var(--danger); background: rgba(239,68,68,0.1); width: 60px; height: 60px; border-radius: 20px;" title="تصفير العداد">
-                <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 3v5h5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <button class="icon-btn" onclick="resetCurrent()" style="color: var(--danger); width: 60px; height: 60px;" title="تصفير">
+                <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 3v5h5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
         </div>
     </div>
 </div>
 
 <div class="modal" id="modal">
-    <div class="modal-content">
+    <div class="glass-panel modal-content">
         <h3 id="modalTitle">إضافة ذكر جديد</h3>
         <div class="input-group">
             <label>نص الذكر</label>
             <input type="text" id="dhikrNameInput" placeholder="مثال: أستغفر الله">
         </div>
         <div class="input-group">
-            <label>الهدف (اتركه فارغاً أو 0 للعد المفتوح)</label>
+            <label>الهدف (اتركه فارغاً للعد المفتوح)</label>
             <input type="number" id="dhikrTargetInput" placeholder="مثال: 100">
         </div>
         <div class="modal-actions">
@@ -166,27 +224,70 @@
 </div>
 
 <script>
-    // دالة مساعدة للحصول على التاريخ والوقت الحالي بتنسيق جميل
+    // --- إدارة السمات (النهاري والليلي) ---
+    const htmlEl = document.documentElement;
+    const themeIcon = document.getElementById('themeIcon');
+    const themeMeta = document.getElementById('themeColorMeta');
+    
+    let currentTheme = localStorage.getItem('app_theme') || 'dark';
+    applyTheme(currentTheme);
+
+    function toggleTheme() {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(currentTheme);
+    }
+
+    function applyTheme(theme) {
+        htmlEl.setAttribute('data-theme', theme);
+        localStorage.setItem('app_theme', theme);
+        if(theme === 'light') {
+            themeIcon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+            themeMeta.setAttribute('content', '#e0eaf5');
+        } else {
+            themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke-linecap="round" stroke-linejoin="round"/>`;
+            themeMeta.setAttribute('content', '#0f172a');
+        }
+    }
+
+    // --- إدارة الإنجاز اليومي ---
+    function updateDailyCounter() {
+        const todayStr = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        let savedDate = localStorage.getItem('daily_date');
+        let dailyTotal = parseInt(localStorage.getItem('daily_total')) || 0;
+
+        // إذا كان يوماً جديداً، صفر العداد
+        if (savedDate !== todayStr) {
+            dailyTotal = 0;
+            localStorage.setItem('daily_date', todayStr);
+            localStorage.setItem('daily_total', dailyTotal);
+        }
+
+        document.getElementById('dailyDateTxt').textContent = todayStr;
+        document.getElementById('dailyTotalTxt').textContent = dailyTotal.toLocaleString('en-US');
+    }
+
+    function addDailyTotal() {
+        let dailyTotal = parseInt(localStorage.getItem('daily_total')) || 0;
+        dailyTotal++;
+        localStorage.setItem('daily_total', dailyTotal);
+        updateDailyCounter();
+    }
+
+    // --- البيانات الأساسية ---
     function getCurrentDateTime() {
-        return new Date().toLocaleString('ar-EG', { 
-            year: 'numeric', 
-            month: '2-digit', 
-            day: '2-digit', 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        });
+        return new Date().toLocaleString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
     }
 
     const defaultDhikrs = [
         { id: 1, text: "سبحان الله وبحمده", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 2, text: "أستغفر الله العظيم وأتوب إليه", count: 0, target: 1000, lastReset: getCurrentDateTime() },
-        { id: 3, text: "الصلاة على النبي", count: 0, target: 0, lastReset: getCurrentDateTime() } 
+        { id: 2, text: "أستغفر الله العظيم وأتوب إليه", count: 0, target: 1000, lastReset: getCurrentDateTime() }
     ];
 
-    let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_pro')) || defaultDhikrs;
+    let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_pro_v2')) || defaultDhikrs;
     let activeId = null;
     let editingId = null;
 
+    // --- إعداد شريط التقدم الدائري ---
     const circle = document.getElementById('progressRing');
     const radius = circle.r.baseVal.value;
     const circumference = radius * 2 * Math.PI;
@@ -200,27 +301,30 @@
     }
 
     function saveData() {
-        localStorage.setItem('my_dhikr_pro', JSON.stringify(dhikrs));
+        localStorage.setItem('my_dhikr_pro_v2', JSON.stringify(dhikrs));
     }
 
+    // --- بناء القائمة مع السحب والإفلات ---
     function renderList() {
+        updateDailyCounter();
         const listContainer = document.getElementById('dhikrList');
         listContainer.innerHTML = '';
         
         dhikrs.forEach(d => {
             const hasTarget = d.target > 0;
             const percent = hasTarget ? Math.min((d.count / d.target) * 100, 100) : 0;
-            const targetText = hasTarget ? ` / ${d.target}` : ' (مفتوح)';
-            
-            // تجهيز نص تاريخ التصفير
-            const resetText = d.lastReset ? `آخر تصفير: ${d.lastReset}` : 'لم يتم البدء بعد';
+            const targetText = hasTarget ? ` / ${d.target}` : '';
+            const resetText = d.lastReset ? `آخر تصفير: ${d.lastReset}` : 'لم يتم البدء';
             
             const card = document.createElement('div');
-            card.className = 'card';
-            card.onclick = () => openCounter(d.id);
+            card.className = 'glass-panel card';
+            card.dataset.id = d.id; // للسحب والإفلات
             
             card.innerHTML = `
-                <div class="card-header">
+                <div class="drag-handle" title="اسحب للترتيب">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                </div>
+                <div class="card-header" onclick="openCounter(${d.id})">
                     <div class="card-title-group">
                         <p class="card-title">${d.text}</p>
                         <p class="card-reset-info">🕒 ${resetText}</p>
@@ -228,11 +332,28 @@
                     <p class="card-count">${d.count}${targetText}</p>
                 </div>
                 ${hasTarget ? `
-                <div class="progress-bar-bg">
+                <div class="progress-bar-bg" onclick="openCounter(${d.id})">
                     <div class="progress-bar-fill" style="width: ${percent}%"></div>
                 </div>` : ''}
             `;
             listContainer.appendChild(card);
+        });
+
+        // تفعيل السحب والإفلات (SortableJS)
+        new Sortable(listContainer, {
+            animation: 150,
+            handle: '.drag-handle', // السحب من خلال الأيقونة فقط لتجنب التعارض مع النقر
+            ghostClass: 'sortable-ghost',
+            onEnd: function (evt) {
+                // إعادة ترتيب المصفوفة بناءً على السحب
+                const itemEl = evt.item;
+                const newIndex = evt.newIndex;
+                const oldIndex = evt.oldIndex;
+                
+                const movedItem = dhikrs.splice(oldIndex, 1)[0];
+                dhikrs.splice(newIndex, 0, movedItem);
+                saveData();
+            },
         });
     }
 
@@ -257,13 +378,8 @@
         document.getElementById('activeDhikrText').textContent = current.text;
         document.getElementById('activeCount').textContent = current.count;
         
-        // تحديث تاريخ التصفير في شاشة العداد
         const resetDateEl = document.getElementById('activeResetDate');
-        if(current.lastReset) {
-            resetDateEl.textContent = `بدأت في: ${current.lastReset}`;
-        } else {
-            resetDateEl.textContent = "";
-        }
+        resetDateEl.textContent = current.lastReset ? `بدأت في: ${current.lastReset}` : "";
         
         const targetEl = document.getElementById('activeTarget');
         if (current.target > 0) {
@@ -279,23 +395,24 @@
     function increment() {
         const current = dhikrs.find(d => d.id === activeId);
         current.count++;
+        addDailyTotal(); // زيادة الإنجاز اليومي العام
+        
         if (navigator.vibrate) navigator.vibrate(40);
         saveData();
         updateCounterUI();
     }
 
     function resetCurrent() {
-        if(confirm("هل أنت متأكد من تصفير العداد وبدء جولة جديدة؟")) {
+        if(confirm("هل أنت متأكد من تصفير العداد وبدء جولة جديدة؟\n(ملاحظة: الإنجاز اليومي العام لن يتأثر)")) {
             const current = dhikrs.find(d => d.id === activeId);
             current.count = 0;
-            // تسجيل وقت التصفير الجديد
             current.lastReset = getCurrentDateTime();
-            
             saveData();
             updateCounterUI();
         }
     }
 
+    // --- النوافذ المنبثقة ---
     function openModal(isEdit = false) {
         const modal = document.getElementById('modal');
         const title = document.getElementById('modalTitle');
@@ -314,7 +431,6 @@
             nameInput.value = "";
             targetInput.value = "";
         }
-        
         modal.classList.add('active');
     }
 
@@ -336,7 +452,6 @@
             updateCounterUI();
         } else {
             const newId = dhikrs.length ? Math.max(...dhikrs.map(d => d.id)) + 1 : 1;
-            // إضافة تاريخ البدء للذكر الجديد
             dhikrs.push({ id: newId, text: text, count: 0, target: target, lastReset: getCurrentDateTime() });
         }
         
@@ -345,22 +460,7 @@
         closeModal();
     }
 
-    function forceAppUpdate() {
-        if(confirm("هل تريد جلب أحدث التعديلات للتطبيق؟ (لن يتم حذف أذكارك وأرقامك)")) {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for (let registration of registrations) {
-                        registration.unregister();
-                    }
-                    window.location.href = window.location.pathname + '?v=' + new Date().getTime();
-                });
-            } else {
-                window.location.reload(true);
-            }
-        }
-    }
-
-    // --- كود زر التثبيت الذكي ---
+    // --- زر التثبيت الذكي ---
     let deferredPrompt;
     const installBtn = document.getElementById('installBtn');
 
@@ -373,18 +473,10 @@
     installBtn.addEventListener('click', async () => {
         if (deferredPrompt !== null) {
             deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                console.log('تم التثبيت بنجاح');
-            }
+            await deferredPrompt.userChoice;
             deferredPrompt = null;
             installBtn.style.display = 'none';
         }
-    });
-
-    window.addEventListener('appinstalled', () => {
-        installBtn.style.display = 'none';
-        deferredPrompt = null;
     });
 
     if ('serviceWorker' in navigator) {
@@ -393,6 +485,8 @@
         });
     }
 
+    // تحديث الإنجاز اليومي عند فتح التطبيق
+    updateDailyCounter();
     renderList();
 </script>
 </body>
