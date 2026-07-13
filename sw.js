@@ -1,12 +1,13 @@
-const CACHE_NAME = 'dhikr-app-pro-v3';
+const CACHE_NAME = 'dhikr-app-pro-v4';
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  // تخزين مكتبة السحب والإفلات لتعمل بدون انترنت
+  'https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js'
 ];
 
 self.addEventListener('install', event => {
-  // تفعيل النسخة الجديدة فوراً
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -15,7 +16,6 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  // حذف الكاش القديم
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
@@ -32,6 +32,23 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).then(
+          function(response) {
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            var responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                cache.put(event.request, responseToCache);
+              });
+            return response;
+          }
+        );
+      })
   );
 });
