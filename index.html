@@ -30,7 +30,7 @@
 
         .header { padding: 20px; padding-top: env(safe-area-inset-top, 20px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
         .header h1 { margin: 0; font-size: 24px; }
-        .header-actions { display: flex; gap: 10px; }
+        .header-actions { display: flex; gap: 8px; align-items: center; }
         
         .icon-btn { background: transparent; border: none; color: var(--primary); display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 8px; border-radius: 50%; transition: 0.2s; }
         .icon-btn:active { background: rgba(16, 185, 129, 0.2); transform: scale(0.9); }
@@ -86,7 +86,11 @@
         <div class="header">
             <h1>مسبحتي</h1>
             <div class="header-actions">
-                <!-- زر تحديث التطبيق الجديد -->
+                <!-- زر التثبيت الذكي (مخفي افتراضياً، يظهر فقط إذا كان متاحاً) -->
+                <button class="icon-btn" id="installBtn" title="تثبيت التطبيق" style="color: #3b82f6; display: none;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <!-- زر تحديث التطبيق -->
                 <button class="icon-btn" onclick="forceAppUpdate()" title="تحديث التطبيق" style="color: var(--text-muted);">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
@@ -305,7 +309,6 @@
         closeModal();
     }
 
-    // دالة تحديث التطبيق وحذف الكاش القديم
     function forceAppUpdate() {
         if(confirm("هل تريد جلب أحدث التعديلات للتطبيق؟ (لن يتم حذف أذكارك وأرقامك)")) {
             if ('serviceWorker' in navigator) {
@@ -313,7 +316,6 @@
                     for (let registration of registrations) {
                         registration.unregister();
                     }
-                    // إضافة رقم عشوائي للرابط لكسر الكاش فوراً
                     window.location.href = window.location.pathname + '?v=' + new Date().getTime();
                 });
             } else {
@@ -322,6 +324,39 @@
         }
     }
 
+    // --- كود زر التثبيت الذكي ---
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // منع المتصفح من إظهار رسالة التثبيت التلقائية
+        e.preventDefault();
+        // حفظ الحدث لاستخدامه عند النقر على الزر
+        deferredPrompt = e;
+        // إظهار زر التثبيت لأن النظام يدعم ذلك
+        installBtn.style.display = 'flex';
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt !== null) {
+            // إظهار رسالة التثبيت
+            deferredPrompt.prompt();
+            // انتظار رد المستخدم
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('تم قبول التثبيت');
+            }
+            deferredPrompt = null;
+            installBtn.style.display = 'none'; // إخفاء الزر بعد التثبيت
+        }
+    });
+
+    window.addEventListener('appinstalled', () => {
+        installBtn.style.display = 'none';
+        deferredPrompt = null;
+    });
+
+    // تسجيل Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js');
