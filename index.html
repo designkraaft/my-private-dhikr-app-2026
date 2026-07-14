@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3669/3669483.png">
     
-    <title>مسبحتي</title>
+    <title>مسبحتي الشاملة</title>
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
@@ -28,10 +28,10 @@
         }
 
         [data-theme="light"] {
-            --bg-gradient: linear-gradient(135deg, #e0eaf5 0%, #f0f4f8 100%);
-            --glass-bg: rgba(255, 255, 255, 0.7);
+            --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 1);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
             --primary: #0ea5e9;
             --primary-glow: rgba(14, 165, 233, 0.4);
             --text: #0f172a;
@@ -43,36 +43,63 @@
         
         #app { display: flex; width: 100%; height: 100%; position: relative; }
         
-        .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; transform: scale(0.95); }
-        .screen.active { opacity: 1; pointer-events: all; transform: scale(1); z-index: 10; }
+        /* ضبط الشاشات لدعم الكمبيوتر والهاتف بشكل مثالي */
+        .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; transform: translateY(20px) scale(0.98); }
+        .screen.active { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); z-index: 10; }
 
         .glass-panel { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); border-radius: var(--card-radius); }
 
-        .header { padding: 20px; padding-top: calc(20px + env(safe-area-inset-top, 0px)); display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-        .header h1 { margin: 0; font-size: 28px; font-weight: 800; background: -webkit-linear-gradient(45deg, var(--primary), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+        .header { padding: 20px; padding-top: calc(20px + env(safe-area-inset-top, 0px)); display: flex; justify-content: space-between; align-items: center; z-index: 10; flex-shrink: 0; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 900; background: -webkit-linear-gradient(45deg, var(--primary), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
         .header-actions { display: flex; gap: 12px; align-items: center; }
         
         .icon-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(8px); color: var(--primary); display: flex; justify-content: center; align-items: center; cursor: pointer; width: 45px; height: 45px; border-radius: 50%; transition: 0.2s; box-shadow: var(--glass-shadow); }
         .icon-btn:active { transform: scale(0.9); background: var(--primary); color: white; }
         
-        .daily-progress-card { margin: 0 20px 15px 20px; padding: 25px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .daily-progress-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); opacity: 0.4; pointer-events: none; }
-        .daily-title { font-size: 15px; font-weight: bold; margin: 0; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .daily-date { font-size: 13px; margin: 8px 0 15px 0; color: var(--primary); }
-        .daily-count { font-size: 48px; font-weight: 900; margin: 0; line-height: 1; text-shadow: 0 4px 20px var(--primary-glow); }
+        .daily-progress-card { margin: 0 20px 20px 20px; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; flex-shrink: 0; border-radius: 28px; }
+        .daily-progress-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%); opacity: 0.3; pointer-events: none; }
+        .daily-title { font-size: 15px; font-weight: bold; margin: 0; color: var(--text-muted); text-transform: uppercase; }
+        .daily-count { font-size: 46px; font-weight: 900; margin: 5px 0 0 0; line-height: 1; text-shadow: 0 4px 20px var(--primary-glow); }
         
-        /* زيادة الهامش السفلي للقائمة بشكل كبير */
-        .list-container { flex: 1; overflow-y: auto; padding: 5px 20px; padding-bottom: calc(140px + env(safe-area-inset-bottom, 20px)); display: flex; flex-direction: column; gap: 15px; }
+        .categories-container { display: flex; flex-direction: column; gap: 15px; padding: 0 20px; flex: 1; overflow-y: auto;}
+        .category-card { border-radius: 24px; padding: 25px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); overflow: hidden; position: relative; flex-shrink: 0;}
+        .category-card:active { transform: scale(0.96); }
         
-        .card { padding: 18px 20px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 12px; position: relative; border-radius: 20px; }
+        .cat-morning { background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); color: white; }
+        .cat-evening { background: linear-gradient(135deg, #6366f1 0%, #312e81 100%); color: white; }
+        .cat-general { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; }
+        
+        .cat-icon { font-size: 38px; line-height: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+        .cat-info { flex: 1; margin-right: 20px; }
+        .cat-title { margin: 0; font-size: 22px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .cat-subtitle { margin: 5px 0 0 0; font-size: 13px; opacity: 0.85; }
+        .cat-arrow { background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+
+        /* منطقة التحديث أسفل الشاشة الرئيسية */
+        .version-container { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; margin: 10px 20px calc(20px + env(safe-area-inset-bottom, 20px)) 20px; background: var(--glass-bg); border-radius: 16px; border: 1px solid var(--glass-border); flex-shrink: 0;}
+        .app-version { color: var(--text-muted); font-size: 14px; font-weight: bold; }
+        .update-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 8px 15px; border-radius: 20px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-weight: bold;}
+        [data-theme="light"] .update-btn { border-color: rgba(0,0,0,0.1); }
+        .update-indicator { width: 10px; height: 10px; background: #64748b; border-radius: 50%; display: inline-block; transition: 0.3s; }
+        
+        .update-btn.has-update { background: rgba(234, 179, 8, 0.15); color: #eab308; border-color: rgba(234, 179, 8, 0.5); border-width: 2px;}
+        .update-indicator.active { background: #eab308; box-shadow: 0 0 12px #eab308; animation: pulse-yellow 1.5s infinite; }
+        @keyframes pulse-yellow { 0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.8); } 70% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); } 100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); } }
+
+        /* شاشة القائمة الفرعية (الأذكار) */
+        .list-container { flex: 1; padding: 5px 20px; padding-bottom: calc(100px + env(safe-area-inset-bottom, 20px)); display: flex; flex-direction: column; gap: 15px; overflow-y: auto;}
+        .section-title { margin: 0; font-size: 22px; font-weight: bold; text-align: center; flex: 1; }
+        
+        .card { padding: 18px 20px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 12px; position: relative; border-radius: 20px; flex-shrink: 0;}
         .card:active { transform: scale(0.97); }
         
         .card-main-row { display: flex; align-items: center; width: 100%; gap: 15px; }
         .drag-handle { color: var(--text-muted); opacity: 0.5; cursor: grab; display: flex; align-items: center; justify-content: center; padding: 10px 0; margin-right: -5px; }
         .drag-handle:active { cursor: grabbing; opacity: 1; color: var(--primary); }
         
-        .card-content-area { flex: 1; display: flex; flex-direction: column; gap: 5px; }
-        .card-title { font-size: 17px; font-weight: bold; margin: 0; line-height: 1.4; }
+        .card-content-area { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .card-title { font-size: 18px; font-weight: bold; margin: 0; line-height: 1.6; }
+        .card-daleel { font-size: 13px; color: #a855f7; margin: 0; line-height: 1.5; background: rgba(168, 85, 247, 0.1); padding: 8px 12px; border-radius: 8px; display: inline-block; border: 1px solid rgba(168, 85, 247, 0.2); }
         .card-reset-info { font-size: 12px; color: var(--text-muted); margin: 0; }
         .card-count { font-size: 18px; color: var(--primary); font-weight: 900; }
         
@@ -83,40 +110,48 @@
         [data-theme="dark"] .progress-bar-bg { background: rgba(255,255,255,0.05); }
         .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #a855f7); border-radius: 10px; transition: width 0.3s ease; box-shadow: 0 0 10px var(--primary-glow); }
 
-        /* رفع الزر العائم للأعلى أكثر */
-        .fab { position: fixed; bottom: calc(45px + env(safe-area-inset-bottom, 20px)); left: 20px; width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #a855f7); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px var(--primary-glow); z-index: 50; cursor: pointer; transition: 0.2s; border: none; }
+        .fab { position: fixed; bottom: calc(40px + env(safe-area-inset-bottom, 20px)); left: 20px; width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #a855f7); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px var(--primary-glow); z-index: 50; cursor: pointer; transition: 0.2s; border: none; }
         .fab:active { transform: scale(0.9); }
 
-        .app-version { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 10px; opacity: 0.5; }
-
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; padding-top: calc(20px + env(safe-area-inset-top, 0px)); }
-        .counter-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .dhikr-text-display { font-size: 24px; text-align: center; margin-bottom: 40px; font-weight: bold; line-height: 1.6; color: var(--text); padding: 0 10px; }
+        /* شاشة العداد - تم ضبطها لدعم الكمبيوتر */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; padding-top: calc(20px + env(safe-area-inset-top, 0px)); flex-shrink: 0; }
         
-        .circle-wrapper { position: relative; width: 320px; height: 320px; display: flex; justify-content: center; align-items: center; }
+        .counter-container-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .dhikr-text-display { font-size: 26px; text-align: center; margin-bottom: 15px; font-weight: bold; line-height: 1.6; color: var(--text); padding: 0 10px; }
+        .dhikr-daleel-display { font-size: 15px; text-align: center; color: #a855f7; margin-bottom: 30px; line-height: 1.5; background: rgba(168, 85, 247, 0.1); padding: 12px 18px; border-radius: 12px; border: 1px solid rgba(168, 85, 247, 0.2); max-width: 95%; }
+        
+        .circle-wrapper { position: relative; width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; flex-shrink: 0; }
         
         .progress-ring { position: absolute; top: 0; left: 0; transform: rotate(-90deg); drop-shadow: 0 0 10px var(--primary-glow); }
         .progress-ring__circle_bg { stroke: var(--glass-border); fill: transparent; stroke-width: 6; opacity: 0.3; }
         .progress-ring__circle { stroke: url(#gradient); fill: transparent; stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 0.1s ease-out; filter: drop-shadow(0 0 8px var(--primary-glow)); }
         
-        .tap-area { position: absolute; width: 260px; height: 260px; border-radius: 50%; z-index: 10; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: transform 0.05s, box-shadow 0.2s; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: inset 0 0 20px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.3); }
+        .tap-area { position: absolute; width: 240px; height: 240px; border-radius: 50%; z-index: 10; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: transform 0.05s, box-shadow 0.2s; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: inset 0 0 20px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.3); }
         .tap-area:active { transform: scale(0.92); box-shadow: inset 0 0 30px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.2); }
-        [data-theme="light"] .tap-area:active { box-shadow: inset 0 0 30px rgba(0,0,0,0.05), 0 10px 20px rgba(0,0,0,0.1); }
         
         @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 var(--primary-glow); } 100% { box-shadow: 0 0 0 30px transparent; } }
         .tap-area.pulse { animation: pulse-ring 0.3s ease-out; }
 
-        .count-huge { font-size: 65px; font-weight: 900; margin: 0; color: var(--text); font-variant-numeric: tabular-nums; }
+        .count-huge { font-size: 55px; font-weight: 900; margin: 0; color: var(--text); font-variant-numeric: tabular-nums; }
         .target-small { font-size: 16px; color: var(--text-muted); margin-top: 5px; font-weight: bold; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; }
         
-        .active-reset-date { font-size: 14px; color: var(--text-muted); margin-top: 40px; text-align: center; background: var(--glass-bg); padding: 10px 25px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
+        .active-reset-date { font-size: 14px; color: var(--text-muted); margin-top: 10px; margin-bottom: 20px; text-align: center; background: var(--glass-bg); padding: 10px 25px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); flex-shrink: 0;}
 
-        /* رفع زر التصفير للأعلى بشكل آمن جداً */
-        .bottom-controls { width: 100%; display: flex; justify-content: center; padding: 20px; padding-bottom: calc(60px + env(safe-area-inset-bottom, 30px)); }
+        /* حاوية الأزرار السفلية الثابتة */
+        .bottom-controls { flex-shrink: 0; background: var(--bg-gradient); width: 100%; display: flex; justify-content: center; padding: 20px; padding-bottom: calc(30px + env(safe-area-inset-bottom, 20px)); border-top: 1px solid var(--glass-border); z-index: 20; box-shadow: 0 -10px 30px rgba(0,0,0,0.3);}
         
         .reset-big-btn { display: flex; align-items: center; gap: 10px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; backdrop-filter: blur(10px); }
         .reset-big-btn:active { transform: scale(0.95); background: var(--danger); color: white; }
 
+        /* النوافذ المنبثقة */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; }
         .modal.active { opacity: 1; pointer-events: all; }
         .modal-content { width: 100%; max-width: 360px; transform: translateY(30px) scale(0.95); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 35px 25px; display: flex; flex-direction: column; position: relative; max-height: 85vh; overflow-y: auto;}
@@ -126,14 +161,15 @@
         .close-x-btn:active { background: rgba(255,255,255,0.1); color: var(--text); }
 
         .modal h3 { margin-top: 0; margin-bottom: 25px; text-align: center; font-size: 22px; font-weight: 800; }
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 10px; color: var(--text-muted); font-size: 14px; font-weight: bold;}
-        .input-group input { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: var(--text); padding: 16px; border-radius: 16px; font-size: 16px; transition: 0.3s; text-align: right; }
-        [data-theme="light"] .input-group input { background: rgba(255,255,255,0.6); }
-        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1); }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; font-weight: bold;}
+        .input-group input, .input-group textarea { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: var(--text); padding: 14px; border-radius: 12px; font-size: 15px; transition: 0.3s; text-align: right; }
+        .input-group textarea { resize: vertical; min-height: 80px; }
+        [data-theme="light"] .input-group input, [data-theme="light"] .input-group textarea { background: rgba(255,255,255,0.6); }
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1); }
         
-        .modal-actions { display: flex; gap: 12px; margin-top: 25px; }
-        .btn { flex: 1; padding: 16px; border-radius: 16px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; box-shadow: var(--glass-shadow); display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .btn { flex: 1; padding: 14px; border-radius: 14px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; color: white; transition: 0.2s; box-shadow: var(--glass-shadow); display: flex; justify-content: center; align-items: center; gap: 8px;}
         .btn-primary { background: linear-gradient(135deg, var(--primary), #a855f7); }
         .btn-success { background: var(--success); }
         .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: none; }
@@ -142,23 +178,13 @@
         
         .sortable-ghost { opacity: 0.3; background: var(--primary-glow); border: 2px dashed var(--primary); border-radius: var(--card-radius); }
         .sortable-fallback { opacity: 1 !important; box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important; cursor: grabbing !important; z-index: 9999 !important; transform: scale(1.02); }
-
-        #updateBanner { display: none; position: absolute; top: 15px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 12px 25px; border-radius: 30px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); z-index: 9999; cursor: pointer; font-weight: bold; text-align: center; width: 90%; max-width: 350px; border: 2px solid rgba(255,255,255,0.2); animation: pulseUpdate 2s infinite; }
-        @keyframes pulseUpdate {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <!-- زر التحديث الثابت -->
-    <div id="updateBanner" onclick="applyUpdate()">✨ يتوفر تحديث جديد! اضغط هنا لتثبيته ✨</div>
-
-    <!-- الشاشة الأولى: القائمة -->
-    <div id="list-screen" class="screen active">
+    <!-- ================= الشاشة الرئيسية (Home) ================= -->
+    <div id="home-screen" class="screen active">
         <div class="header">
             <h1>مسبحتي</h1>
             <div class="header-actions">
@@ -173,44 +199,96 @@
         
         <div class="glass-panel daily-progress-card">
             <p class="daily-title">إنجازك اليوم 🏆</p>
-            <p class="daily-date" id="dailyDateTxt"></p>
             <p class="daily-count" id="dailyTotalTxt">0</p>
         </div>
 
-        <div class="list-container" id="dhikrList">
-            <!-- البطاقات -->
+        <div class="categories-container">
+            <div class="category-card cat-morning" onclick="openCategory('morning', 'أذكار الصباح')">
+                <div class="cat-icon">🌅</div>
+                <div class="cat-info">
+                    <h3 class="cat-title">أذكار الصباح</h3>
+                    <p class="cat-subtitle">حصنك اليومي وبداية يومك</p>
+                </div>
+                <div class="cat-arrow">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
+
+            <div class="category-card cat-evening" onclick="openCategory('evening', 'أذكار المساء')">
+                <div class="cat-icon">🌃</div>
+                <div class="cat-info">
+                    <h3 class="cat-title">أذكار المساء</h3>
+                    <p class="cat-subtitle">ختام يومك بالطمأنينة</p>
+                </div>
+                <div class="cat-arrow">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
+
+            <div class="category-card cat-general" onclick="openCategory('general', 'مسبحتي للأجر')">
+                <div class="cat-icon">📿</div>
+                <div class="cat-info">
+                    <h3 class="cat-title">مسبحتي للأجر</h3>
+                    <p class="cat-subtitle">أذكارك الخاصة وعدادك المفتوح</p>
+                </div>
+                <div class="cat-arrow">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+            </div>
         </div>
         
-        <div class="app-version">الإصدار 1.6.0</div>
+        <!-- زر التحديث المنظم أسفل الرئيسية -->
+        <div class="version-container">
+            <span class="app-version">الإصدار 3.0.0</span>
+            <button id="inlineUpdateBtn" class="update-btn" onclick="applyUpdate()">
+                <span class="update-indicator" id="updateIndicator"></span>
+                <span id="updateBtnText">النسخة محدثة</span>
+            </button>
+        </div>
+    </div>
 
-        <!-- الزر العائم -->
-        <button class="fab" onclick="openAddModal()" title="إضافة ذكر">
+    <!-- ================= شاشة قسم الأذكار (قائمة الأذكار) ================= -->
+    <div id="category-screen" class="screen">
+        <div class="top-bar">
+            <button class="icon-btn" onclick="goBackToHome()">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <h2 class="section-title" id="categoryTitle">الأذكار</h2>
+            <div style="width:45px;"></div> 
+        </div>
+
+        <div class="list-container" id="dhikrList">
+            <!-- البطاقات تظهر هنا برمجياً -->
+        </div>
+
+        <button class="fab" id="fabAddBtn" onclick="openAddModal()" title="إضافة ذكر" style="display: none;">
             <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
         </button>
     </div>
 
-    <!-- الشاشة الثانية: العداد -->
+    <!-- ================= شاشة العداد ================= -->
     <div id="counter-screen" class="screen">
         <div class="top-bar">
-            <button class="icon-btn" onclick="goBack()">
+            <button class="icon-btn" onclick="goBackToCategory()">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div></div> 
         </div>
         
-        <div class="counter-container">
+        <div class="counter-container-scrollable">
             <div class="dhikr-text-display" id="activeDhikrText">سبحان الله</div>
+            <div class="dhikr-daleel-display" id="activeDaleelText" style="display: none;"></div>
             
             <div class="circle-wrapper">
-                <svg class="progress-ring" width="320" height="320">
+                <svg class="progress-ring" width="300" height="300">
                     <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                             <stop offset="0%" stop-color="var(--primary)" />
                             <stop offset="100%" stop-color="#a855f7" />
                         </linearGradient>
                     </defs>
-                    <circle class="progress-ring__circle_bg" cx="160" cy="160" r="145"></circle>
-                    <circle id="progressRing" class="progress-ring__circle" cx="160" cy="160" r="145"></circle>
+                    <circle class="progress-ring__circle_bg" cx="150" cy="150" r="135"></circle>
+                    <circle id="progressRing" class="progress-ring__circle" cx="150" cy="150" r="135"></circle>
                 </svg>
                 
                 <div class="tap-area" id="mainTapArea" onclick="increment()">
@@ -231,7 +309,7 @@
     </div>
 </div>
 
-<!-- النوافذ -->
+<!-- ================= النوافذ المنبثقة ================= -->
 <div class="modal" id="modal">
     <div class="glass-panel modal-content">
         <button class="close-x-btn" onclick="closeModal()">&times;</button>
@@ -239,7 +317,11 @@
         
         <div class="input-group">
             <label>نص الذكر</label>
-            <input type="text" id="dhikrNameInput" placeholder="اكتب هنا...">
+            <textarea id="dhikrNameInput" placeholder="اكتب الذكر هنا..."></textarea>
+        </div>
+        <div class="input-group">
+            <label>الدليل الشرعي / الفضل (اختياري)</label>
+            <textarea id="dhikrDaleelInput" placeholder="مثال: رواه البخاري..."></textarea>
         </div>
         <div class="input-group">
             <label>الهدف (اتركه فارغاً للعد المفتوح)</label>
@@ -269,6 +351,7 @@
 </div>
 
 <script>
+    // --- إدارة المظهر ---
     const htmlEl = document.documentElement;
     const themeIcon = document.getElementById('themeIcon');
     const themeMeta = document.getElementById('themeColorMeta');
@@ -286,7 +369,7 @@
         localStorage.setItem('app_theme', theme);
         if(theme === 'light') {
             themeIcon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
-            themeMeta.setAttribute('content', '#e0eaf5');
+            themeMeta.setAttribute('content', '#f0f4f8');
         } else {
             themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke-linecap="round" stroke-linejoin="round"/>`;
             themeMeta.setAttribute('content', '#0f172a');
@@ -302,9 +385,12 @@
             dailyTotal = 0;
             localStorage.setItem('daily_date', todayStr);
             localStorage.setItem('daily_total', dailyTotal);
+            // تصفير أذكار الصباح والمساء يومياً
+            dhikrs.forEach(d => {
+                if(d.category === 'morning' || d.category === 'evening') d.count = 0;
+            });
+            saveData();
         }
-
-        document.getElementById('dailyDateTxt').textContent = todayStr;
         document.getElementById('dailyTotalTxt').textContent = dailyTotal.toLocaleString('en-US');
     }
 
@@ -319,16 +405,64 @@
         return new Date().toLocaleString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
     }
 
+    // --- قاعدة بيانات الأذكار الشاملة والصحيحة ---
     const defaultDhikrs = [
-        { id: 1, text: "سبحان الله وبحمده، سبحان الله العظيم", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 2, text: "أستغفر الله العظيم الذي لا إله إلا هو الحي القيوم وأتوب إليه", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 3, text: "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 4, text: "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر", count: 0, target: 100, lastReset: getCurrentDateTime() }
+        // أذكار الصباح
+        { id: 101, category: 'morning', text: "أعوذ بالله من الشيطان الرجيم: (اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...)", daleel: "[cite: 1] من قالها حين يصبح أجير من الجن حتى يمسي (الحاكم وصححه الألباني)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 102, category: 'morning', text: "سورة الإخلاص، وسورة الفلق، وسورة الناس.", daleel: "[cite: 1] من قالها ثلاث مرات حين يصبح وحين يمسي كفته من كل شيء (أبو داود والترمذي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 103, category: 'morning', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ...", daleel: "[cite: 1]", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 104, category: 'morning', text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.", daleel: "[cite: 1] حديث صحيح (رواه الترمذي)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 105, category: 'morning', text: "سيد الاستغفار: اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ...", daleel: "[cite: 1] من قالها موقناً بها فمات من يومه دخل الجنة (البخاري)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 106, category: 'morning', text: "اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ، وجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إلَّا أَنْتَ...", daleel: "[cite: 1] من قالها أربع مرات أعتقه الله من النار (أبو داود والبخاري في الأدب المفرد)", count: 0, target: 4, lastReset: getCurrentDateTime() },
+        { id: 107, category: 'morning', text: "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ.", daleel: "[cite: 1] من قالها حين يصبح فقد أدى شكر يومه (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 108, category: 'morning', text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ...", daleel: "[cite: 1] (أبو داود وأحمد)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 109, category: 'morning', text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ العَظِيمِ.", daleel: "[cite: 1] من قالها سبع مرات كفاه الله ما أهمه (ابن السني وأبو داود)", count: 0, target: 7, lastReset: getCurrentDateTime() },
+        { id: 110, category: 'morning', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ والْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي...", daleel: "[cite: 1] (أبو داود وابن ماجه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 111, category: 'morning', text: "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَّا إِلَهَ إِلَّا أَنْتَ...", daleel: "[cite: 1] (الترمذي وأبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 112, category: 'morning', text: "بِسْمِ اللهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.", daleel: "[cite: 1] لم يضره شيء (أبو داود والترمذي وابن ماجه وأحمد)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 113, category: 'morning', text: "رَضِيتُ بِاللهِ رَبَّاً، وَبِالْإِسْلَامِ دِيناً، وَبِمُحَمَّدٍ ﷺ نَبِيّاً.", daleel: "[cite: 1] كان حقاً على الله أن يرضيه يوم القيامة (أحمد والنسائي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 114, category: 'morning', text: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.", daleel: "[cite: 1] (الحاكم وصححه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 115, category: 'morning', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ: فَتْحَهُ، وَنَصْرَهُ، وَنُورَهُ، وَبَرَكَتَهُ، وَهُدَاهُ...", daleel: "[cite: 1] (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 116, category: 'morning', text: "أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ وعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيَّنَا مُحَمَّدٍ ﷺ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ...", daleel: "[cite: 1] (أحمد وابن السني)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 117, category: 'morning', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.", daleel: "[cite: 1] لم يأت أحد يوم القيامة بأفضل مما جاء به (مسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
+        { id: 118, category: 'morning', text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", daleel: "[cite: 1] (النسائي)", count: 0, target: 10, lastReset: getCurrentDateTime() },
+        { id: 119, category: 'morning', text: "لَا إِلَهَ إِلَّا اللَّهُ، وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", daleel: "[cite: 1] كانت له عدل عشر رقاب ومحيت عنه مائة سيئة (البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
+        { id: 120, category: 'morning', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ.", daleel: "[cite: 1] (مسلم)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 121, category: 'morning', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نَافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلًا مُتَقَبَّلًا.", daleel: "[cite: 1] (ابن السني وابن ماجه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 124, category: 'morning', text: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.", daleel: "[cite: 1] أدركته شفاعتي يوم القيامة (الطبراني)", count: 0, target: 10, lastReset: getCurrentDateTime() },
+
+        // أذكار المساء
+        { id: 201, category: 'evening', text: "أعوذ بالله من الشيطان الرجيم: (اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...)", daleel: "[cite: 1] أجير من الجن حتى يصبح", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 202, category: 'evening', text: "سورة الإخلاص، وسورة الفلق، وسورة الناس.", daleel: "[cite: 1] كفته من كل شيء (أبو داود والترمذي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 203, category: 'evening', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ...", daleel: "[cite: 1]", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 204, category: 'evening', text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.", daleel: "[cite: 1] حديث صحيح (رواه الترمذي)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 205, category: 'evening', text: "سيد الاستغفار: اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ...", daleel: "[cite: 1] من قالها موقناً بها فمات من ليلته دخل الجنة (البخاري)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 206, category: 'evening', text: "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ، وأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ، وجَمِيعَ خَلْقِكَ...", daleel: "[cite: 1] أعتقه الله من النار (أبو داود والبخاري)", count: 0, target: 4, lastReset: getCurrentDateTime() },
+        { id: 207, category: 'evening', text: "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ...", daleel: "[cite: 1] فقد أدى شكر ليلته (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 208, category: 'evening', text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي...", daleel: "[cite: 1] (أبو داود وأحمد)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 209, category: 'evening', text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ العَظِيمِ.", daleel: "[cite: 1] كفاه الله ما أهمه (ابن السني وأبو داود)", count: 0, target: 7, lastReset: getCurrentDateTime() },
+        { id: 210, category: 'evening', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ والْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ...", daleel: "[cite: 1] (أبو داود وابن ماجه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 211, category: 'evening', text: "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ...", daleel: "[cite: 1] (الترمذي وأبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 212, category: 'evening', text: "بِسْمِ اللهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.", daleel: "[cite: 1] (أبو داود والترمذي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 213, category: 'evening', text: "رَضِيتُ بِاللهِ رَبَّاً، وَبِالْإِسْلَامِ دِيناً، وَبِمُحَمَّدٍ ﷺ نَبِيّاً.", daleel: "[cite: 1] (أحمد والنسائي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 214, category: 'evening', text: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ...", daleel: "[cite: 1] (الحاكم)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 215, category: 'evening', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ...", daleel: "[cite: 1] (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 216, category: 'evening', text: "أَمْسَيْنَا عَلَى فِطْرَةِ الْإِسْلَامِ وعَلَى كَلِمَةِ الْإِخْلَاصِ...", daleel: "[cite: 1] (أحمد وابن السني)", count: 0, target: 1, lastReset: getCurrentDateTime() },
+        { id: 217, category: 'evening', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.", daleel: "[cite: 1] (مسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
+        { id: 218, category: 'evening', text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", daleel: "[cite: 1] (النسائي)", count: 0, target: 10, lastReset: getCurrentDateTime() },
+        { id: 223, category: 'evening', text: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.", daleel: "[cite: 1] لم تضره حمة تلك الليلة (أحمد والنسائي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
+        { id: 224, category: 'evening', text: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.", daleel: "[cite: 1] أدركته شفاعتي يوم القيامة (الطبراني)", count: 0, target: 10, lastReset: getCurrentDateTime() },
+
+        // أذكار الأجر العامة
+        { id: 301, category: 'general', text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ.", daleel: "[cite: 1] (البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
+        { id: 302, category: 'general', text: "لا حول ولا قوة إلا بالله.", daleel: "كنز من كنوز الجنة (البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() }
     ];
 
-    let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_pro_v5')) || defaultDhikrs;
+    let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_pro_v8')) || defaultDhikrs;
+    let currentCategory = 'morning';
     let activeId = null;
     let editingId = null;
+    let sortableInstance = null;
 
     const circle = document.getElementById('progressRing');
     const radius = circle.r.baseVal.value;
@@ -343,34 +477,74 @@
     }
 
     function saveData() {
-        localStorage.setItem('my_dhikr_pro_v5', JSON.stringify(dhikrs));
+        localStorage.setItem('my_dhikr_pro_v8', JSON.stringify(dhikrs));
     }
 
+    // --- نظام التنقل ---
+    function openCategory(cat, title) {
+        currentCategory = cat;
+        document.getElementById('categoryTitle').textContent = title;
+        document.getElementById('fabAddBtn').style.display = (cat === 'general') ? 'flex' : 'none';
+        
+        renderList();
+        
+        document.getElementById('home-screen').classList.remove('active');
+        document.getElementById('category-screen').classList.add('active');
+    }
+
+    function goBackToHome() {
+        updateDailyCounter(); 
+        document.getElementById('category-screen').classList.remove('active');
+        document.getElementById('home-screen').classList.add('active');
+    }
+
+    function goBackToCategory() {
+        renderList(); 
+        document.getElementById('counter-screen').classList.remove('active');
+        document.getElementById('category-screen').classList.add('active');
+        activeId = null;
+    }
+
+    function openCounter(id) {
+        activeId = id;
+        updateCounterUI();
+        document.getElementById('category-screen').classList.remove('active');
+        document.getElementById('counter-screen').classList.add('active');
+    }
+
+    // --- عرض القائمة ---
     function renderList() {
-        updateDailyCounter();
         const listContainer = document.getElementById('dhikrList');
         listContainer.innerHTML = '';
         
-        if (dhikrs.length === 0) {
+        const filteredDhikrs = dhikrs.filter(d => d.category === currentCategory);
+        
+        if (filteredDhikrs.length === 0) {
             listContainer.innerHTML = `
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px; padding: 20px; margin-top: 40px; opacity: 0.7;">
                     <svg viewBox="0 0 24 24" width="80" height="80" stroke="var(--text-muted)" stroke-width="1.5" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <p style="color: var(--text-muted); font-size: 16px;">قائمتك فارغة، اضغط على زر الإضافة بالأسفل لتبدأ.</p>
+                    <p style="color: var(--text-muted); font-size: 16px;">القسم فارغ، اضغط على زر الإضافة لتبدأ.</p>
                 </div>
             `;
             return; 
         }
 
-        dhikrs.forEach(d => {
+        filteredDhikrs.forEach(d => {
             const hasTarget = d.target > 0;
             const percent = hasTarget ? Math.min((d.count / d.target) * 100, 100) : 0;
             const targetText = hasTarget ? ` / ${d.target}` : '';
-            const resetText = d.lastReset ? `آخر تصفير: ${d.lastReset}` : 'لم يتم البدء';
+            const daleelHTML = d.daleel ? `<p class="card-daleel">${d.daleel}</p>` : '';
             
             const card = document.createElement('div');
             card.className = 'glass-panel card';
             card.dataset.id = d.id; 
             
+            // زر التعديل يظهر فقط في القسم العام لتجنب العبث بالأذكار الثابتة
+            const editIconHTML = (currentCategory === 'general') ? 
+                `<button class="edit-action-btn" onclick="openEditModal(${d.id}); event.stopPropagation();" title="تعديل">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>` : '';
+
             card.innerHTML = `
                 <div class="card-main-row">
                     <div class="drag-handle" title="اسحب للترتيب">
@@ -379,13 +553,11 @@
                     
                     <div class="card-content-area" onclick="openCounter(${d.id})">
                         <p class="card-title">${d.text}</p>
-                        <p class="card-reset-info">🕒 ${resetText}</p>
+                        ${daleelHTML}
                     </div>
 
                     <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px;">
-                        <button class="edit-action-btn" onclick="openEditModal(${d.id}); event.stopPropagation();" title="تعديل">
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                        </button>
+                        ${editIconHTML}
                         <p class="card-count" onclick="openCounter(${d.id})">${d.count}${targetText}</p>
                     </div>
                 </div>
@@ -397,7 +569,8 @@
             listContainer.appendChild(card);
         });
 
-        new Sortable(listContainer, {
+        if(sortableInstance) sortableInstance.destroy();
+        sortableInstance = new Sortable(listContainer, {
             animation: 150,
             handle: '.drag-handle',
             delay: 150,             
@@ -407,27 +580,20 @@
             fallbackClass: "sortable-fallback",
             fallbackOnBody: true,       
             onEnd: function (evt) {
-                const newIndex = evt.newIndex;
-                const oldIndex = evt.oldIndex;
-                const movedItem = dhikrs.splice(oldIndex, 1)[0];
-                dhikrs.splice(newIndex, 0, movedItem);
+                const movedCardId = parseInt(evt.item.dataset.id);
+                const newIndexWithinCategory = evt.newIndex;
+                
+                let catItems = dhikrs.filter(d => d.category === currentCategory);
+                let otherItems = dhikrs.filter(d => d.category !== currentCategory);
+                
+                const oldIndexCat = catItems.findIndex(d => d.id === movedCardId);
+                const movedItem = catItems.splice(oldIndexCat, 1)[0];
+                catItems.splice(newIndexWithinCategory, 0, movedItem);
+                
+                dhikrs = [...catItems, ...otherItems]; 
                 saveData();
             },
         });
-    }
-
-    function openCounter(id) {
-        activeId = id;
-        updateCounterUI();
-        document.getElementById('list-screen').classList.remove('active');
-        document.getElementById('counter-screen').classList.add('active');
-    }
-
-    function goBack() {
-        renderList(); 
-        document.getElementById('counter-screen').classList.remove('active');
-        document.getElementById('list-screen').classList.add('active');
-        activeId = null;
     }
 
     function updateCounterUI() {
@@ -435,6 +601,15 @@
         const current = dhikrs.find(d => d.id === activeId);
         
         document.getElementById('activeDhikrText').textContent = current.text;
+        
+        const daleelEl = document.getElementById('activeDaleelText');
+        if(current.daleel) {
+            daleelEl.textContent = current.daleel;
+            daleelEl.style.display = 'block';
+        } else {
+            daleelEl.style.display = 'none';
+        }
+
         document.getElementById('activeCount').textContent = current.count;
         
         const resetDateEl = document.getElementById('activeResetDate');
@@ -506,6 +681,7 @@
         editingId = null;
         document.getElementById('modalTitle').textContent = "إضافة ذكر جديد";
         document.getElementById('dhikrNameInput').value = "";
+        document.getElementById('dhikrDaleelInput').value = "";
         document.getElementById('dhikrTargetInput').value = "";
         document.getElementById('deleteBtn').style.display = 'none';
         document.getElementById('modal').classList.add('active');
@@ -517,6 +693,7 @@
         editingId = id;
         document.getElementById('modalTitle').textContent = "تعديل الذكر";
         document.getElementById('dhikrNameInput').value = current.text;
+        document.getElementById('dhikrDaleelInput').value = current.daleel || "";
         document.getElementById('dhikrTargetInput').value = current.target || '';
         document.getElementById('deleteBtn').style.display = 'flex'; 
         document.getElementById('modal').classList.add('active');
@@ -528,6 +705,7 @@
 
     function saveDhikr() {
         const text = document.getElementById('dhikrNameInput').value.trim();
+        const daleel = document.getElementById('dhikrDaleelInput').value.trim();
         const targetStr = document.getElementById('dhikrTargetInput').value;
         const target = targetStr ? parseInt(targetStr) : 0; 
         
@@ -536,10 +714,11 @@
         if (editingId) {
             const current = dhikrs.find(d => d.id === editingId);
             current.text = text;
+            current.daleel = daleel;
             current.target = target;
         } else {
             const newId = dhikrs.length ? Math.max(...dhikrs.map(d => d.id)) + 1 : 1;
-            dhikrs.push({ id: newId, text: text, count: 0, target: target, lastReset: getCurrentDateTime() });
+            dhikrs.push({ id: newId, category: 'general', text: text, daleel: daleel, count: 0, target: target, lastReset: getCurrentDateTime() });
         }
         
         saveData();
@@ -564,7 +743,9 @@
                 newWorker = reg.installing;
                 newWorker.addEventListener('statechange', () => {
                     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        document.getElementById('updateBanner').style.display = 'block';
+                        document.getElementById('updateIndicator').classList.add('active');
+                        document.getElementById('updateBtnText').textContent = 'تحديث متوفر! اضغط هنا';
+                        document.getElementById('inlineUpdateBtn').classList.add('has-update');
                     }
                 });
             });
@@ -581,6 +762,17 @@
     function applyUpdate() {
         if (newWorker) {
             newWorker.postMessage('skipWaiting');
+        } else {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (let registration of registrations) {
+                        registration.unregister();
+                    }
+                    window.location.href = window.location.pathname + '?v=' + new Date().getTime();
+                });
+            } else {
+                window.location.reload(true);
+            }
         }
     }
 
@@ -603,7 +795,6 @@
     });
 
     updateDailyCounter();
-    renderList();
 </script>
 </body>
 </html>
