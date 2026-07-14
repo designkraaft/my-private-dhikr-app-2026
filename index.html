@@ -43,7 +43,6 @@
         
         #app { display: flex; width: 100%; height: 100%; position: relative; }
         
-        /* ضبط الشاشات لدعم الكمبيوتر والهاتف بشكل مثالي */
         .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; transform: translateY(20px) scale(0.98); }
         .screen.active { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); z-index: 10; }
 
@@ -75,7 +74,6 @@
         .cat-subtitle { margin: 5px 0 0 0; font-size: 13px; opacity: 0.85; }
         .cat-arrow { background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
 
-        /* منطقة التحديث أسفل الشاشة الرئيسية */
         .version-container { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; margin: 10px 20px calc(20px + env(safe-area-inset-bottom, 20px)) 20px; background: var(--glass-bg); border-radius: 16px; border: 1px solid var(--glass-border); flex-shrink: 0;}
         .app-version { color: var(--text-muted); font-size: 14px; font-weight: bold; }
         .update-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 8px 15px; border-radius: 20px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-weight: bold;}
@@ -86,7 +84,6 @@
         .update-indicator.active { background: #eab308; box-shadow: 0 0 12px #eab308; animation: pulse-yellow 1.5s infinite; }
         @keyframes pulse-yellow { 0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.8); } 70% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); } 100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); } }
 
-        /* شاشة القائمة الفرعية (الأذكار) */
         .list-container { flex: 1; padding: 5px 20px; padding-bottom: calc(100px + env(safe-area-inset-bottom, 20px)); display: flex; flex-direction: column; gap: 15px; overflow-y: auto;}
         .section-title { margin: 0; font-size: 22px; font-weight: bold; text-align: center; flex: 1; }
         
@@ -98,9 +95,8 @@
         .drag-handle:active { cursor: grabbing; opacity: 1; color: var(--primary); }
         
         .card-content-area { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .card-title { font-size: 18px; font-weight: bold; margin: 0; line-height: 1.6; }
+        .card-title { font-size: 16px; font-weight: bold; margin: 0; line-height: 1.8; text-align: justify; }
         .card-daleel { font-size: 13px; color: #a855f7; margin: 0; line-height: 1.5; background: rgba(168, 85, 247, 0.1); padding: 8px 12px; border-radius: 8px; display: inline-block; border: 1px solid rgba(168, 85, 247, 0.2); }
-        .card-reset-info { font-size: 12px; color: var(--text-muted); margin: 0; }
         .card-count { font-size: 18px; color: var(--primary); font-weight: 900; }
         
         .edit-action-btn { background: transparent; border: none; color: var(--text-muted); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; }
@@ -113,19 +109,11 @@
         .fab { position: fixed; bottom: calc(40px + env(safe-area-inset-bottom, 20px)); left: 20px; width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), #a855f7); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px var(--primary-glow); z-index: 50; cursor: pointer; transition: 0.2s; border: none; }
         .fab:active { transform: scale(0.9); }
 
-        /* شاشة العداد - تم ضبطها لدعم الكمبيوتر */
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px; padding-top: calc(20px + env(safe-area-inset-top, 0px)); flex-shrink: 0; }
         
-        .counter-container-scrollable {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
+        .counter-container-scrollable { flex: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px; }
 
-        .dhikr-text-display { font-size: 26px; text-align: center; margin-bottom: 15px; font-weight: bold; line-height: 1.6; color: var(--text); padding: 0 10px; }
+        .dhikr-text-display { font-size: 20px; text-align: center; margin-bottom: 15px; font-weight: bold; line-height: 1.8; color: var(--text); padding: 0 10px; }
         .dhikr-daleel-display { font-size: 15px; text-align: center; color: #a855f7; margin-bottom: 30px; line-height: 1.5; background: rgba(168, 85, 247, 0.1); padding: 12px 18px; border-radius: 12px; border: 1px solid rgba(168, 85, 247, 0.2); max-width: 95%; }
         
         .circle-wrapper { position: relative; width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; flex-shrink: 0; }
@@ -143,18 +131,14 @@
         .count-huge { font-size: 55px; font-weight: 900; margin: 0; color: var(--text); font-variant-numeric: tabular-nums; }
         .target-small { font-size: 16px; color: var(--text-muted); margin-top: 5px; font-weight: bold; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; }
         
-        .active-reset-date { font-size: 14px; color: var(--text-muted); margin-top: 10px; margin-bottom: 20px; text-align: center; background: var(--glass-bg); padding: 10px 25px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); flex-shrink: 0;}
-
-        /* حاوية الأزرار السفلية الثابتة */
         .bottom-controls { flex-shrink: 0; background: var(--bg-gradient); width: 100%; display: flex; justify-content: center; padding: 20px; padding-bottom: calc(30px + env(safe-area-inset-bottom, 20px)); border-top: 1px solid var(--glass-border); z-index: 20; box-shadow: 0 -10px 30px rgba(0,0,0,0.3);}
         
         .reset-big-btn { display: flex; align-items: center; gap: 10px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; backdrop-filter: blur(10px); }
         .reset-big-btn:active { transform: scale(0.95); background: var(--danger); color: white; }
 
-        /* النوافذ المنبثقة */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; }
         .modal.active { opacity: 1; pointer-events: all; }
-        .modal-content { width: 100%; max-width: 360px; transform: translateY(30px) scale(0.95); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 35px 25px; display: flex; flex-direction: column; position: relative; max-height: 85vh; overflow-y: auto;}
+        .modal-content { width: 100%; max-width: 380px; transform: translateY(30px) scale(0.95); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 35px 25px; display: flex; flex-direction: column; position: relative; max-height: 85vh; overflow-y: auto;}
         .modal.active .modal-content { transform: translateY(0) scale(1); }
         
         .close-x-btn { position: absolute; top: 15px; left: 15px; background: transparent; border: none; color: var(--text-muted); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border-radius: 50%; transition: 0.2s; }
@@ -190,9 +174,6 @@
             <div class="header-actions">
                 <button class="icon-btn" id="themeToggleBtn" title="تبديل الوضع" onclick="toggleTheme()">
                     <svg id="themeIcon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"></svg>
-                </button>
-                <button class="icon-btn" id="installBtn" title="تثبيت التطبيق" style="display: none;">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
             </div>
         </div>
@@ -239,7 +220,7 @@
         
         <!-- زر التحديث المنظم أسفل الرئيسية -->
         <div class="version-container">
-            <span class="app-version">الإصدار 3.0.0</span>
+            <span class="app-version">الإصدار 4.0.0</span>
             <button id="inlineUpdateBtn" class="update-btn" onclick="applyUpdate()">
                 <span class="update-indicator" id="updateIndicator"></span>
                 <span id="updateBtnText">النسخة محدثة</span>
@@ -297,7 +278,7 @@
                 </div>
             </div>
             
-            <p class="active-reset-date" id="activeResetDate"></p>
+            <p class="active-reset-date" id="activeResetDate" style="display: none;"></p>
         </div>
 
         <div class="bottom-controls">
@@ -338,15 +319,19 @@
     </div>
 </div>
 
+<!-- نافذة إتمام الذكر (مجهزة لدعم الانتقال للذكر التالي) -->
 <div class="modal" id="goalModal">
     <div class="glass-panel modal-content" style="text-align: center; border: 1px solid var(--success);">
         <button class="close-x-btn" onclick="closeGoalModal()">&times;</button>
         <div style="width: 70px; height: 70px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
             <svg viewBox="0 0 24 24" width="40" height="40" stroke="var(--success)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
-        <h3 style="color: var(--success); font-size: 26px; margin-bottom: 10px;">تقبل الله طاعتكم 🌿</h3>
-        <p style="color: var(--text); font-size: 16px; margin-bottom: 25px; line-height: 1.6;">الحمد لله الذي بنعمته تتم الصالحات،<br>لقد أتممت وردك بفضل الله.</p>
-        <button class="btn btn-success" onclick="resetFromGoal()" style="width: 100%;">🔄 بدء جولة جديدة</button>
+        <h3 id="goalModalTitle" style="color: var(--success); font-size: 24px; margin-bottom: 10px;">تقبل الله طاعتكم 🌿</h3>
+        <p id="goalModalDesc" style="color: var(--text); font-size: 16px; margin-bottom: 25px; line-height: 1.6;">الحمد لله الذي بنعمته تتم الصالحات.</p>
+        
+        <div class="modal-actions" id="goalModalActions" style="flex-direction: column; gap: 12px; margin-top: 0;">
+            <!-- يتم إضافة الأزرار برمجياً هنا بناء على القسم -->
+        </div>
     </div>
 </div>
 
@@ -385,7 +370,6 @@
             dailyTotal = 0;
             localStorage.setItem('daily_date', todayStr);
             localStorage.setItem('daily_total', dailyTotal);
-            // تصفير أذكار الصباح والمساء يومياً
             dhikrs.forEach(d => {
                 if(d.category === 'morning' || d.category === 'evening') d.count = 0;
             });
@@ -405,60 +389,61 @@
         return new Date().toLocaleString('ar-EG', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
     }
 
-    // --- قاعدة بيانات الأذكار الشاملة والصحيحة ---
+    // --- قاعدة بيانات الأذكار الشاملة والصحيحة والنصوص الكاملة ---
     const defaultDhikrs = [
-        // أذكار الصباح
-        { id: 101, category: 'morning', text: "أعوذ بالله من الشيطان الرجيم: (اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ...)", daleel: "[cite: 1] من قالها حين يصبح أجير من الجن حتى يمسي (الحاكم وصححه الألباني)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 102, category: 'morning', text: "سورة الإخلاص، وسورة الفلق، وسورة الناس.", daleel: "[cite: 1] من قالها ثلاث مرات حين يصبح وحين يمسي كفته من كل شيء (أبو داود والترمذي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 103, category: 'morning', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ...", daleel: "[cite: 1]", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 104, category: 'morning', text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ.", daleel: "[cite: 1] حديث صحيح (رواه الترمذي)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 105, category: 'morning', text: "سيد الاستغفار: اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ...", daleel: "[cite: 1] من قالها موقناً بها فمات من يومه دخل الجنة (البخاري)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 106, category: 'morning', text: "اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ، وأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ، وجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إلَّا أَنْتَ...", daleel: "[cite: 1] من قالها أربع مرات أعتقه الله من النار (أبو داود والبخاري في الأدب المفرد)", count: 0, target: 4, lastReset: getCurrentDateTime() },
-        { id: 107, category: 'morning', text: "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ.", daleel: "[cite: 1] من قالها حين يصبح فقد أدى شكر يومه (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 108, category: 'morning', text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ...", daleel: "[cite: 1] (أبو داود وأحمد)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 109, category: 'morning', text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ العَظِيمِ.", daleel: "[cite: 1] من قالها سبع مرات كفاه الله ما أهمه (ابن السني وأبو داود)", count: 0, target: 7, lastReset: getCurrentDateTime() },
-        { id: 110, category: 'morning', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ والْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي...", daleel: "[cite: 1] (أبو داود وابن ماجه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 111, category: 'morning', text: "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَّا إِلَهَ إِلَّا أَنْتَ...", daleel: "[cite: 1] (الترمذي وأبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 112, category: 'morning', text: "بِسْمِ اللهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.", daleel: "[cite: 1] لم يضره شيء (أبو داود والترمذي وابن ماجه وأحمد)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 113, category: 'morning', text: "رَضِيتُ بِاللهِ رَبَّاً، وَبِالْإِسْلَامِ دِيناً، وَبِمُحَمَّدٍ ﷺ نَبِيّاً.", daleel: "[cite: 1] كان حقاً على الله أن يرضيه يوم القيامة (أحمد والنسائي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 114, category: 'morning', text: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.", daleel: "[cite: 1] (الحاكم وصححه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 115, category: 'morning', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ: فَتْحَهُ، وَنَصْرَهُ، وَنُورَهُ، وَبَرَكَتَهُ، وَهُدَاهُ...", daleel: "[cite: 1] (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 116, category: 'morning', text: "أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ وعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيَّنَا مُحَمَّدٍ ﷺ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ...", daleel: "[cite: 1] (أحمد وابن السني)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 117, category: 'morning', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.", daleel: "[cite: 1] لم يأت أحد يوم القيامة بأفضل مما جاء به (مسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 118, category: 'morning', text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", daleel: "[cite: 1] (النسائي)", count: 0, target: 10, lastReset: getCurrentDateTime() },
-        { id: 119, category: 'morning', text: "لَا إِلَهَ إِلَّا اللَّهُ، وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", daleel: "[cite: 1] كانت له عدل عشر رقاب ومحيت عنه مائة سيئة (البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 120, category: 'morning', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ.", daleel: "[cite: 1] (مسلم)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 121, category: 'morning', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نَافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلًا مُتَقَبَّلًا.", daleel: "[cite: 1] (ابن السني وابن ماجه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 124, category: 'morning', text: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.", daleel: "[cite: 1] أدركته شفاعتي يوم القيامة (الطبراني)", count: 0, target: 10, lastReset: getCurrentDateTime() },
+        // أذكار الصباح كاملة
+        { id: 101, category: 'morning', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: ﴿ اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴾", daleel: "أجير من الجن حتى يمسي (الحاكم)", count: 0, target: 1, lastReset: "" },
+        { id: 102, category: 'morning', text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: ﴿ قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴾\n\nبِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: ﴿ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴾\n\nبِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: ﴿ قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ ﴾", daleel: "من قالها ثلاث مرات حين يصبح وحين يمسي كفته من كل شيء (أبو داود والترمذي)", count: 0, target: 3, lastReset: "" },
+        { id: 103, category: 'morning', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَومِ وَخَيْرَ مَا بَعْدَهُ وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرَّ مَا بَعْدَهُ، رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ، وَسُوءِ الكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ", daleel: "(مسلم)", count: 0, target: 1, lastReset: "" },
+        { id: 104, category: 'morning', text: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ النُّشُورُ", daleel: "(الترمذي)", count: 0, target: 1, lastReset: "" },
+        { id: 105, category: 'morning', text: "سيد الاستغفار: اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", daleel: "من قالها موقناً بها فمات من يومه دخل الجنة (البخاري)", count: 0, target: 1, lastReset: "" },
+        { id: 106, category: 'morning', text: "اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّداً عَبْدُكَ وَرَسُولُكَ", daleel: "من قالها أربع مرات أعتقه الله من النار (أبو داود)", count: 0, target: 4, lastReset: "" },
+        { id: 107, category: 'morning', text: "اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ", daleel: "من قالها فقد أدى شكر يومه (أبو داود)", count: 0, target: 1, lastReset: "" },
+        { id: 108, category: 'morning', text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ، والْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ", daleel: "(أبو داود وأحمد)", count: 0, target: 3, lastReset: "" },
+        { id: 109, category: 'morning', text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ العَظِيمِ", daleel: "كفاه الله ما أهمه (ابن السني وأبو داود)", count: 0, target: 7, lastReset: "" },
+        { id: 110, category: 'morning', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ والْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ : فِي دِينِي وَدُنْيَايَ وَأَهْلِي، وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أَغْتَالَ مِنْ تَحْتِي", daleel: "(أبو داود وابن ماجه)", count: 0, target: 1, lastReset: "" },
+        { id: 111, category: 'morning', text: "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَّا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً، أَوْ أَجُرَّهُ إِلى مُسْلِمٍ", daleel: "(الترمذي وأبو داود)", count: 0, target: 1, lastReset: "" },
+        { id: 112, category: 'morning', text: "بِسْمِ اللهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ", daleel: "(أبو داود والترمذي وابن ماجه)", count: 0, target: 3, lastReset: "" },
+        { id: 113, category: 'morning', text: "رَضِيتُ بِاللهِ رَبَّاً، وَبِالْإِسْلَامِ دِيناً، وَبِمُحَمَّدٍ ﷺ نَبِيّاً", daleel: "كان حقاً على الله أن يرضيه (أحمد والنسائي)", count: 0, target: 3, lastReset: "" },
+        { id: 114, category: 'morning', text: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ", daleel: "(الحاكم وصححه)", count: 0, target: 1, lastReset: "" },
+        { id: 115, category: 'morning', text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ : فَتْحَهُ، وَنَصْرَهُ وَنُورَهُ، وَبَرَكَتَهُ، وَهُدَاهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهِ وَشَرِّ مَا بَعْدَهُ", daleel: "(أبو داود)", count: 0, target: 1, lastReset: "" },
+        { id: 116, category: 'morning', text: "أَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ وعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيَّنَا مُحَمَّدٍ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ، حَنِيفاً مُسْلِماً وَمَا كَانَ مِنَ الْمُشْرِكِينَ", daleel: "(أحمد وابن السني)", count: 0, target: 1, lastReset: "" },
+        { id: 117, category: 'morning', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", daleel: "لم يأت أحد بأفضل مما جاء به (مسلم)", count: 0, target: 100, lastReset: "" },
+        { id: 118, category: 'morning', text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", daleel: "(النسائي في عمل اليوم والليلة)", count: 0, target: 10, lastReset: "" },
+        { id: 119, category: 'morning', text: "لَا إِلَهَ إِلَّا اللَّهُ، وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", daleel: "عدل عشر رقاب ومحيت مائة سيئة (البخاري ومسلم)", count: 0, target: 100, lastReset: "" },
+        { id: 120, category: 'morning', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ : عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ", daleel: "(مسلم)", count: 0, target: 3, lastReset: "" },
+        { id: 121, category: 'morning', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْماً نَافِعاً، وَرِزْقاً طَيِّباً، وَعَمَلًا مُتَقَبَّلًا", daleel: "(ابن السني وابن ماجه)", count: 0, target: 1, lastReset: "" },
+        { id: 122, category: 'morning', text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", daleel: "(البخاري ومسلم)", count: 0, target: 100, lastReset: "" },
+        { id: 123, category: 'morning', text: "اللَّهُمَّ صَلَّ وَسَلَّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", daleel: "أدركته شفاعتي يوم القيامة (الطبراني)", count: 0, target: 10, lastReset: "" },
 
-        // أذكار المساء
-        { id: 201, category: 'evening', text: "أعوذ بالله من الشيطان الرجيم: (اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...)", daleel: "[cite: 1] أجير من الجن حتى يصبح", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 202, category: 'evening', text: "سورة الإخلاص، وسورة الفلق، وسورة الناس.", daleel: "[cite: 1] كفته من كل شيء (أبو داود والترمذي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 203, category: 'evening', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ...", daleel: "[cite: 1]", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 204, category: 'evening', text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.", daleel: "[cite: 1] حديث صحيح (رواه الترمذي)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 205, category: 'evening', text: "سيد الاستغفار: اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ...", daleel: "[cite: 1] من قالها موقناً بها فمات من ليلته دخل الجنة (البخاري)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 206, category: 'evening', text: "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ، وأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ، وجَمِيعَ خَلْقِكَ...", daleel: "[cite: 1] أعتقه الله من النار (أبو داود والبخاري)", count: 0, target: 4, lastReset: getCurrentDateTime() },
-        { id: 207, category: 'evening', text: "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ...", daleel: "[cite: 1] فقد أدى شكر ليلته (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 208, category: 'evening', text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي...", daleel: "[cite: 1] (أبو داود وأحمد)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 209, category: 'evening', text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ العَظِيمِ.", daleel: "[cite: 1] كفاه الله ما أهمه (ابن السني وأبو داود)", count: 0, target: 7, lastReset: getCurrentDateTime() },
-        { id: 210, category: 'evening', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ والْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ...", daleel: "[cite: 1] (أبو داود وابن ماجه)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 211, category: 'evening', text: "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ...", daleel: "[cite: 1] (الترمذي وأبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 212, category: 'evening', text: "بِسْمِ اللهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ.", daleel: "[cite: 1] (أبو داود والترمذي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 213, category: 'evening', text: "رَضِيتُ بِاللهِ رَبَّاً، وَبِالْإِسْلَامِ دِيناً، وَبِمُحَمَّدٍ ﷺ نَبِيّاً.", daleel: "[cite: 1] (أحمد والنسائي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 214, category: 'evening', text: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ...", daleel: "[cite: 1] (الحاكم)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 215, category: 'evening', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ...", daleel: "[cite: 1] (أبو داود)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 216, category: 'evening', text: "أَمْسَيْنَا عَلَى فِطْرَةِ الْإِسْلَامِ وعَلَى كَلِمَةِ الْإِخْلَاصِ...", daleel: "[cite: 1] (أحمد وابن السني)", count: 0, target: 1, lastReset: getCurrentDateTime() },
-        { id: 217, category: 'evening', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ.", daleel: "[cite: 1] (مسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 218, category: 'evening', text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", daleel: "[cite: 1] (النسائي)", count: 0, target: 10, lastReset: getCurrentDateTime() },
-        { id: 223, category: 'evening', text: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.", daleel: "[cite: 1] لم تضره حمة تلك الليلة (أحمد والنسائي)", count: 0, target: 3, lastReset: getCurrentDateTime() },
-        { id: 224, category: 'evening', text: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.", daleel: "[cite: 1] أدركته شفاعتي يوم القيامة (الطبراني)", count: 0, target: 10, lastReset: getCurrentDateTime() },
+        // أذكار المساء كاملة
+        { id: 201, category: 'evening', text: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّحِيمِ: ﴿ اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الْأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴾", daleel: "أجير من الجن حتى يصبح", count: 0, target: 1, lastReset: "" },
+        { id: 202, category: 'evening', text: "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: ﴿ قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَدْ * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴾\n\nبِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: ﴿ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِن شَرِّ مَا خَلَقَ * وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ * وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴾\n\nبِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ: ﴿ قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَهِ النَّاسِ * مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ ﴾", daleel: "كفته من كل شيء (أبو داود والترمذي)", count: 0, target: 3, lastReset: "" },
+        { id: 203, category: 'evening', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرَّ مَا بَعْدَهَا، رَبِّ أَعُوذُ بِكَ مِنَ الكَسَلِ، وَسُوءِ الكِبَرِ، رَبِّ أَعُوذُ بِكَ مِنْ عَذَابٍ فِي النَّارِ وَعَذَابٍ فِي الْقَبْرِ", daleel: "(مسلم)", count: 0, target: 1, lastReset: "" },
+        { id: 204, category: 'evening', text: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ", daleel: "(الترمذي)", count: 0, target: 1, lastReset: "" },
+        { id: 205, category: 'evening', text: "سيد الاستغفار: اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", daleel: "من قالها موقناً بها فمات من ليلته دخل الجنة (البخاري)", count: 0, target: 1, lastReset: "" },
+        { id: 206, category: 'evening', text: "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّداً عَبْدُكَ وَرَسُولُكَ", daleel: "(أبو داود)", count: 0, target: 4, lastReset: "" },
+        { id: 207, category: 'evening', text: "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لَا شَرِيكَ لَكَ، فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ", daleel: "فقد أدى شكر ليلته (أبو داود)", count: 0, target: 1, lastReset: "" },
+        { id: 208, category: 'evening', text: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ. اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الكُفْرِ، والْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ", daleel: "(أبو داود وأحمد)", count: 0, target: 3, lastReset: "" },
+        { id: 209, category: 'evening', text: "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ العَظِيمِ", daleel: "(ابن السني وأبو داود)", count: 0, target: 7, lastReset: "" },
+        { id: 210, category: 'evening', text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ والْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ : فِي دِينِي وَدُنْيَايَ وَأَهْلِي، وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي، وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أَغْتَالَ مِنْ تَحْتِي", daleel: "(أبو داود وابن ماجه)", count: 0, target: 1, lastReset: "" },
+        { id: 211, category: 'evening', text: "اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَوَاتِ وَالْأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَّا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي، وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءاً، أَوْ أَجُرَّهُ إِلى مُسْلِمٍ", daleel: "(الترمذي وأبو داود)", count: 0, target: 1, lastReset: "" },
+        { id: 212, category: 'evening', text: "بِسْمِ اللهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ", daleel: "(أبو داود والترمذي)", count: 0, target: 3, lastReset: "" },
+        { id: 213, category: 'evening', text: "رَضِيتُ بِاللهِ رَبَّاً، وَبِالْإِسْلَامِ دِيناً، وَبِمُحَمَّدٍ ﷺ نَبِيّاً", daleel: "(أحمد والنسائي)", count: 0, target: 3, lastReset: "" },
+        { id: 214, category: 'evening', text: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ", daleel: "(الحاكم)", count: 0, target: 1, lastReset: "" },
+        { id: 215, category: 'evening', text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ : فَتْحَهَا، وَنَصْرَهَا، وَنُورَهَا، وَبَرَكَتَهَا، وَهُدَاهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهَا وَشَرِّ مَا بَعْدَهَا", daleel: "(أبو داود)", count: 0, target: 1, lastReset: "" },
+        { id: 216, category: 'evening', text: "أَمْسَيْنَا عَلَى فِطْرَةِ الْإِسْلَامِ وعَلَى كَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِينِ نَبِيَّنَا مُحَمَّدٍ، وَعَلَى مِلَّةِ أَبِينَا إِبْرَاهِيمَ، حَنِيفاً مُسْلِماً وَمَا كَانَ مِنَ الْمُشْرِكِينَ", daleel: "(أحمد وابن السني)", count: 0, target: 1, lastReset: "" },
+        { id: 217, category: 'evening', text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", daleel: "(مسلم)", count: 0, target: 100, lastReset: "" },
+        { id: 218, category: 'evening', text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", daleel: "(النسائي)", count: 0, target: 10, lastReset: "" },
+        { id: 219, category: 'evening', text: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", daleel: "لم تضره حمة تلك الليلة (أحمد والنسائي)", count: 0, target: 3, lastReset: "" },
+        { id: 220, category: 'evening', text: "اللَّهُمَّ صَلَّ وَسَلَّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", daleel: "أدركته شفاعتي يوم القيامة (الطبراني)", count: 0, target: 10, lastReset: "" },
 
         // أذكار الأجر العامة
-        { id: 301, category: 'general', text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ.", daleel: "[cite: 1] (البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
-        { id: 302, category: 'general', text: "لا حول ولا قوة إلا بالله.", daleel: "كنز من كنوز الجنة (البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() }
+        { id: 301, category: 'general', text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", daleel: "(البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() },
+        { id: 302, category: 'general', text: "لا حول ولا قوة إلا بالله", daleel: "كنز من كنوز الجنة (البخاري ومسلم)", count: 0, target: 100, lastReset: getCurrentDateTime() }
     ];
 
-    let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_pro_v8')) || defaultDhikrs;
+    let dhikrs = JSON.parse(localStorage.getItem('my_dhikr_pro_v15')) || defaultDhikrs;
     let currentCategory = 'morning';
     let activeId = null;
     let editingId = null;
@@ -477,17 +462,15 @@
     }
 
     function saveData() {
-        localStorage.setItem('my_dhikr_pro_v8', JSON.stringify(dhikrs));
+        localStorage.setItem('my_dhikr_pro_v15', JSON.stringify(dhikrs));
     }
 
-    // --- نظام التنقل ---
     function openCategory(cat, title) {
         currentCategory = cat;
         document.getElementById('categoryTitle').textContent = title;
         document.getElementById('fabAddBtn').style.display = (cat === 'general') ? 'flex' : 'none';
         
         renderList();
-        
         document.getElementById('home-screen').classList.remove('active');
         document.getElementById('category-screen').classList.add('active');
     }
@@ -512,7 +495,6 @@
         document.getElementById('counter-screen').classList.add('active');
     }
 
-    // --- عرض القائمة ---
     function renderList() {
         const listContainer = document.getElementById('dhikrList');
         listContainer.innerHTML = '';
@@ -539,7 +521,6 @@
             card.className = 'glass-panel card';
             card.dataset.id = d.id; 
             
-            // زر التعديل يظهر فقط في القسم العام لتجنب العبث بالأذكار الثابتة
             const editIconHTML = (currentCategory === 'general') ? 
                 `<button class="edit-action-btn" onclick="openEditModal(${d.id}); event.stopPropagation();" title="تعديل">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
@@ -612,9 +593,6 @@
 
         document.getElementById('activeCount').textContent = current.count;
         
-        const resetDateEl = document.getElementById('activeResetDate');
-        resetDateEl.textContent = current.lastReset ? `بدأت في: ${current.lastReset}` : "";
-        
         const targetEl = document.getElementById('activeTarget');
         if (current.target > 0) {
             targetEl.textContent = `الهدف: ${current.target}`;
@@ -637,8 +615,7 @@
         const current = dhikrs.find(d => d.id === activeId);
         
         if (current.target > 0 && current.count >= current.target) {
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
-            document.getElementById('goalModal').classList.add('active');
+            showGoalModal(current);
             return; 
         }
 
@@ -653,9 +630,52 @@
         if (current.target > 0 && current.count === current.target) {
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             setTimeout(() => {
-                document.getElementById('goalModal').classList.add('active');
+                showGoalModal(current);
             }, 300);
         }
+    }
+
+    function showGoalModal(current) {
+        const actionsDiv = document.getElementById('goalModalActions');
+        const modalTitle = document.getElementById('goalModalTitle');
+        const modalDesc = document.getElementById('goalModalDesc');
+
+        if (current.category === 'general') {
+            modalTitle.textContent = "تقبل الله طاعتكم 🌿";
+            modalDesc.innerHTML = "الحمد لله الذي بنعمته تتم الصالحات،<br>لقد أتممت وردك بفضل الله.";
+            actionsDiv.innerHTML = `
+                <button class="btn btn-success" onclick="resetFromGoal()" style="width: 100%;">🔄 بدء جولة جديدة</button>
+            `;
+        } else {
+            const catDhikrs = dhikrs.filter(d => d.category === current.category);
+            const currentIndex = catDhikrs.findIndex(d => d.id === current.id);
+
+            if (currentIndex < catDhikrs.length - 1) {
+                modalTitle.textContent = "أتممت الذكر بنجاح ✨";
+                modalDesc.innerHTML = "بارك الله لك، انتقل للذكر التالي في الورد.";
+                const nextId = catDhikrs[currentIndex + 1].id;
+                actionsDiv.innerHTML = `
+                    <button class="btn btn-primary" onclick="moveToNextDhikr(${nextId})" style="width: 100%; font-size: 18px;">➡️ انتقل للذكر التالي</button>
+                `;
+            } else {
+                modalTitle.textContent = "ختام الورد 🌿";
+                modalDesc.innerHTML = "ما شاء الله! لقد أتممت ورد " + (current.category === 'morning' ? "الصباح" : "المساء") + " كاملاً.";
+                actionsDiv.innerHTML = `
+                    <button class="btn btn-success" onclick="closeGoalAndGoBack()" style="width: 100%;">✅ إتمام والعودة للقائمة</button>
+                `;
+            }
+        }
+        document.getElementById('goalModal').classList.add('active');
+    }
+
+    function moveToNextDhikr(nextId) {
+        closeGoalModal();
+        openCounter(nextId);
+    }
+
+    function closeGoalAndGoBack() {
+        closeGoalModal();
+        goBackToCategory();
     }
 
     function closeGoalModal() {
@@ -668,7 +688,7 @@
     }
 
     function resetCurrent(force = false) {
-        if(force || confirm("هل أنت متأكد من تصفير العداد وبدء جولة جديدة؟\n(ملاحظة: الإنجاز اليومي لن يتأثر)")) {
+        if(force || confirm("هل أنت متأكد من تصفير العداد؟\n(ملاحظة: الإنجاز اليومي لن يتأثر)")) {
             const current = dhikrs.find(d => d.id === activeId);
             current.count = 0;
             current.lastReset = getCurrentDateTime();
